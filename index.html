@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Przewodnik po bieganiu — VDOT &amp; szkoła amerykańska</title>
+<meta name="description" content="Personalny przewodnik po bieganiu: system VDOT Jacka Danielsa, strefy treningowe, plan treningowy, kalkulator stref tętna.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #005BD9;
+  --blue-dark: #004AB3;
+  --blue-light: #e8f0fe;
+  --blue-muted: #6ba3e8;
+  --navy: #0A1628;
+  --bg: #ffffff;
+  --bg-alt: #f5f6f8;
+  --bg-warm: #fafbfc;
+  --text: #1a1e2c;
+  --text-dim: #5c6478;
+  --text-light: #8b92a5;
+  --border: #e2e5ec;
+  --border-light: #eef0f4;
+  --green: #16a34a;
+  --green-bg: #ecfdf5;
+  --orange: #ea580c;
+  --orange-bg: #fff7ed;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --yellow: #ca8a04;
+  --yellow-bg: #fefce8;
+  --purple: #7c3aed;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --max-w: 960px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow: 0 2px 8px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ NOISE TEXTURE ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ═══ NAVIGATION ═══ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: var(--blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: .2s;
+}
+.nav-logo:hover { color: var(--blue-dark); }
+.nav-logo svg { width: 24px; height: 24px; stroke: currentColor; }
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-links {
+  display: flex;
+  gap: 2px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  transition: .2s;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.nav-links a:hover { color: var(--blue); background: var(--blue-light); }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  .nav-links.open { display: flex; }
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  background: var(--navy);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(0,91,217,.25), transparent),
+    radial-gradient(ellipse 50% 80% at 20% 80%, rgba(0,91,217,.15), transparent);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(transparent, var(--navy));
+}
+.hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 80px 24px 64px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .hero-inner { grid-template-columns: 1fr; text-align: center; padding: 56px 24px 48px; }
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 8vw, 72px);
+  line-height: 1;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--blue-muted); }
+.hero .lead {
+  font-size: 18px;
+  color: rgba(255,255,255,.6);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* VDOT CIRCLE */
+.vdot-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid var(--blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,91,217,.1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 60px rgba(0,91,217,.2), inset 0 0 30px rgba(0,91,217,.1);
+  animation: vdotPulse 3s ease-in-out infinite;
+}
+@keyframes vdotPulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(0,91,217,.2), inset 0 0 30px rgba(0,91,217,.1); }
+  50% { box-shadow: 0 0 80px rgba(0,91,217,.35), inset 0 0 40px rgba(0,91,217,.15); }
+}
+.vdot-circle small {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-muted);
+}
+.vdot-circle strong {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  color: #fff;
+  line-height: 1;
+}
+@media (max-width: 640px) {
+  .vdot-circle { margin: 0 auto 24px; width: 130px; height: 130px; }
+  .vdot-circle strong { font-size: 42px; }
+}
+
+/* ═══ STATS BAR ═══ */
+.stats-bar {
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+}
+.stats {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+@media (max-width: 768px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+.stat {
+  padding: 20px 16px;
+  text-align: center;
+  border-right: 1px solid var(--border-light);
+}
+.stat:last-child { border-right: none; }
+.stat .label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+.stat .value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+}
+.stat .value.accent { color: var(--blue); }
+.stat .value.green { color: var(--green); }
+.stat .value.orange { color: var(--orange); }
+.stat .value.red { color: var(--red); }
+.stat .unit {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* ═══ CONTENT ═══ */
+.content {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+section:last-child { border-bottom: none; }
+
+/* Section with alt bg — full bleed */
+.section-alt {
+  background: var(--bg-alt);
+  margin: 0 -24px;
+  padding: 56px 24px;
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+/* ═══ HEADINGS ═══ */
+h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+h2 .badge {
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  vertical-align: middle;
+  margin-left: 12px;
+  position: relative;
+  top: -4px;
+}
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-orange { background: var(--orange-bg); color: var(--orange); }
+.badge-purple { background: #f3e8ff; color: var(--purple); }
+.badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+
+.section-lead {
+  font-size: 18px;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  max-width: 640px;
+}
+
+h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 40px 0 16px;
+}
+h3:first-child { margin-top: 0; }
+
+h4 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 24px 0 8px;
+}
+
+p { margin-bottom: 14px; }
+
+a { color: var(--blue); }
+a:hover { color: var(--blue-dark); }
+
+/* ═══ CARDS ═══ */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s, transform .2s;
+}
+.card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.card-blue { border-top: 4px solid var(--blue); }
+.card-green { border-top: 4px solid var(--green); }
+.card-orange { border-top: 4px solid var(--orange); }
+.card-body { padding: 24px; }
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.card-flag {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.card-flag.blue-bg { background: var(--blue-light); }
+.card-flag.green-bg { background: var(--green-bg); }
+.card-flag.orange-bg { background: var(--orange-bg); }
+.card-flag.red-bg { background: var(--red-bg); }
+.card-flag.purple-bg { background: #f3e8ff; }
+
+.card-header-row h4 { margin: 0; font-size: 18px; }
+.card-header-row .sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 2px 0 0;
+}
+
+/* ═══ SCHOOL GRID ═══ */
+.school-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media (max-width: 768px) {
+  .school-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══ TABLES ═══ */
+.table-wrap {
+  overflow-x: auto;
+  margin: 20px 0 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+thead {
+  background: var(--navy);
+  color: #fff;
+}
+th {
+  padding: 12px 18px;
+  text-align: left;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+td {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-light);
+}
+tbody tr:hover { background: var(--blue-light); }
+tbody tr:nth-child(even) { background: var(--bg-warm); }
+tbody tr:nth-child(even):hover { background: var(--blue-light); }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.tag-green { background: var(--green-bg); color: var(--green); }
+.tag-blue { background: var(--blue-light); color: var(--blue); }
+.tag-orange { background: var(--orange-bg); color: var(--orange); }
+.tag-red { background: var(--red-bg); color: var(--red); }
+.tag-yellow { background: var(--yellow-bg); color: var(--yellow); }
+.tag-purple { background: #f3e8ff; color: var(--purple); }
+
+/* ═══ ZONE BAR ═══ */
+.zone-bar {
+  display: flex;
+  height: 44px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 20px 0 28px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  box-shadow: var(--shadow-sm);
+}
+.zone-bar div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.zb-1 { background: #22c55e; flex: 10; }
+.zb-2 { background: #16a34a; flex: 15; }
+.zb-3 { background: #eab308; flex: 7; color: #1a1e2c; text-shadow: none; }
+.zb-4 { background: #ea580c; flex: 8; }
+.zb-5 { background: #dc2626; flex: 10; }
+
+/* ═══ TRAINING DAYS ═══ */
+.training-day {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.training-day::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+.training-day.day-1::before { background: var(--green); }
+.training-day.day-2::before { background: var(--orange); }
+.training-day.day-3::before { background: var(--red); }
+
+.training-day h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 8px;
+}
+.training-day .meta {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.training-day ul {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+.training-day li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* ═══ INFO BOX ═══ */
+.info-box {
+  background: var(--blue-light);
+  border-left: 4px solid var(--blue);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 15px;
+}
+.info-box.warn {
+  background: var(--yellow-bg);
+  border-left-color: var(--yellow);
+}
+.info-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ═══ ACCORDION ═══ */
+.accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+.accordion-item { border-top: 1px solid var(--border-light); }
+.accordion-item:first-child { border-top: none; }
+.accordion-btn {
+  width: 100%;
+  background: #fff;
+  border: none;
+  color: var(--text);
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: .15s;
+  font-family: inherit;
+}
+.accordion-btn:hover { background: var(--bg-alt); }
+.accordion-btn::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--blue);
+  transition: .2s;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.accordion-item.open .accordion-btn { background: var(--blue-light); color: var(--blue); }
+.accordion-item.open .accordion-btn::after { content: '\2212'; }
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+}
+.accordion-body-inner {
+  padding: 0 20px 20px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* ═══ CALCULATOR ═══ */
+.calc-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 500px) { .calc-form { grid-template-columns: 1fr; } }
+.calc-form label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  display: block;
+  margin-bottom: 6px;
+}
+.calc-form input, .calc-form select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 16px;
+  font-family: inherit;
+  transition: .2s;
+}
+.calc-form input:focus, .calc-form select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0,91,217,.12);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: .2s;
+  font-family: inherit;
+}
+.btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+
+.calc-result {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: none;
+  margin-top: 16px;
+}
+
+/* ═══ UPLOAD GALLERY ═══ */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  margin-bottom: 24px;
+  background: var(--bg-warm);
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+}
+.upload-zone svg { width: 40px; height: 40px; color: var(--text-light); margin-bottom: 12px; }
+.upload-zone p { margin: 0; color: var(--text-dim); font-size: 15px; }
+.upload-zone .cta { color: var(--blue); font-weight: 700; }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.gallery-item {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  aspect-ratio: 4/5;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: .2s;
+}
+.gallery-item:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gallery-item .caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(10,22,40,.85));
+  padding: 28px 12px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.gallery-item .delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(220,38,38,.85);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: .2s;
+}
+.gallery-item:hover .delete-btn { opacity: 1; }
+
+/* ═══ WEEKLY TABLE ═══ */
+.week-table td:first-child {
+  font-weight: 700;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* ═══ LIGHTBOX ═══ */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10,22,40,.92);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.5);
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 14px;
+}
+.footer a { color: rgba(255,255,255,.7); }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp .5s ease forwards;
+}
+.fade-up:nth-child(1) { animation-delay: .05s; }
+.fade-up:nth-child(2) { animation-delay: .1s; }
+.fade-up:nth-child(3) { animation-delay: .15s; }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      BIEGANIE
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#szkoly">Szkoły</a></li>
+      <li><a href="#vdot">VDOT</a></li>
+      <li><a href="#strefy">Strefy</a></li>
+      <li><a href="#plan">Plan</a></li>
+      <li><a href="#tetno">Tętno</a></li>
+      <li><a href="#poczatkujacy">Od zera</a></li>
+      <li><a href="#garmin">Garmin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>PRZEWODNIK<br>PO <span>BIEGANIU</span></h1>
+      <p class="lead">System VDOT Jacka Danielsa, spersonalizowane strefy treningowe i plan treningowy oparty o szkołę amerykańską.</p>
+    </div>
+    <div class="vdot-circle">
+      <small>VDOT</small>
+      <strong>27.9</strong>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Półmaraton</div>
+      <div class="value">2:30:03</div>
+    </div>
+    <div class="stat">
+      <div class="label">Tempo</div>
+      <div class="value accent">7:07</div>
+      <div class="unit">min/km</div>
+    </div>
+    <div class="stat">
+      <div class="label">HR max</div>
+      <div class="value">191</div>
+      <div class="unit">bpm</div>
+    </div>
+    <div class="stat">
+      <div class="label">Easy</div>
+      <div class="value green">7:20–8:02</div>
+      <div class="unit">min/km</div>
+    </div>
+    <div class="stat">
+      <div class="label">Threshold</div>
+      <div class="value orange">6:27</div>
+      <div class="unit">min/km</div>
+    </div>
+    <div class="stat">
+      <div class="label">Interval</div>
+      <div class="value red">5:40</div>
+      <div class="unit">min/km</div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══ SZKOŁY BIEGANIA ═══ -->
+<section id="szkoly">
+  <h2>SZKOŁY BIEGANIA <span class="badge badge-blue">Porównanie</span></h2>
+  <p class="section-lead">Trzy główne podejścia do treningu biegowego — każde z inną filozofią budowania formy.</p>
+
+  <div class="school-grid">
+    <div class="card card-green fade-up">
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="card-flag green-bg">🇵🇱</div>
+          <div>
+            <h4>Polska</h4>
+            <p class="sub">Wunderteam / Mulak</p>
+          </div>
+        </div>
+        <p>Bieganie blisko natury — lasy, krosy, pagórki. Słynna „zabawa biegowa" (fartlek). Mniej matematyki, więcej czucia ciała.</p>
+        <p style="margin:0"><strong>Złota zasada:</strong> Słuchaj organizmu i baw się tempem.</p>
+      </div>
+    </div>
+
+    <div class="card card-blue fade-up">
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="card-flag blue-bg">🇺🇸</div>
+          <div>
+            <h4>Amerykańska</h4>
+            <p class="sub">Jack Daniels — VDOT</p>
+          </div>
+        </div>
+        <p>Apteczna precyzja. Trening oparty na tempach (VDOT). Ścisły podział na 5 stref: Easy, Marathon, Threshold, Interval, Repetition.</p>
+        <p style="margin:0"><strong>Złota zasada:</strong> Biegaj we właściwym tempie, ani sekundy za szybko.</p>
+      </div>
+    </div>
+
+    <div class="card card-orange fade-up">
+      <div class="card-body">
+        <div class="card-header-row">
+          <div class="card-flag orange-bg">🇳🇴</div>
+          <div>
+            <h4>Norweska</h4>
+            <p class="sub">Ingebrigtsen / Bakken</p>
+          </div>
+        </div>
+        <p>Królowie kwasu mlekowego. Double Threshold — próg dzielony na interwały z krótkimi przerwami. Kontrola laktatu z krwi.</p>
+        <p style="margin:0"><strong>Złota zasada:</strong> Dużo progu, ale podzielonego — by się nie zajechać.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Cecha</th><th>Polska</th><th>Amerykańska</th><th>Norweska</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Wyznacznik tempa</td><td>Samopoczucie</td><td>VDOT / tempo (min/km)</td><td>Laktat (mmol/L)</td></tr>
+        <tr><td>Główny bodziec</td><td>Fartlek, krosy</td><td>5 stref (E/M/T/I/R)</td><td>Próg mleczanowy</td></tr>
+        <tr><td>Interwały VO2max</td><td>Okazjonalnie</td><td>Tak — 5×1km</td><td>Rzadko</td></tr>
+        <tr><td>Przerwy</td><td>Na czuja</td><td>= czas wysiłku</td><td>Bardzo krótkie (30–60s)</td></tr>
+        <tr><td>Biegi bazowe</td><td>Las, teren</td><td>80% w strefie Easy</td><td>Ultra wolno — strefa 1</td></tr>
+        <tr><td>Podejście</td><td>Intuicyjne</td><td>Matematyczne</td><td>Laboratoryjne</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <strong>Twój plan to hybryda</strong>
+    Bazę i rytmy z klasyki (polska + amerykańska), kilometrówki z amerykańskiej szkoły, próg w formacie Cruise Intervals z norweskiej. Docelowo trenujesz wg szkoły amerykańskiej (VDOT 27.9).
+  </div>
+</section>
+
+<!-- ═══ VDOT ═══ -->
+<section id="vdot">
+  <h2>SYSTEM VDOT <span class="badge badge-green">Jack Daniels</span></h2>
+  <p class="section-lead">Wskaźnik sprawności biegowej łączący VO2max, ekonomię biegu i próg mleczanowy w jedną liczbę.</p>
+
+  <h3>Co to jest VDOT?</h3>
+  <p>VDOT (wymawiane „V-dot") to pseudo-VO2max opracowany przez dr. Jacka Danielsa — amerykańskiego fizjologa wysiłku i trenera olimpijskiego. Obliczasz go z wyniku biegu startowego, a nie z testu laboratoryjnego.</p>
+
+  <ol style="padding-left:20px;margin-bottom:24px">
+    <li>Biegniesz na zawodach na maksa (5 km, 10 km, półmaraton)</li>
+    <li>Wpisujesz wynik do <a href="https://vdoto2.com/calculator/" target="_blank" rel="noopener">kalkulatora VDOT</a></li>
+    <li>Dostajesz liczbę VDOT (np. <strong>27.9</strong>)</li>
+    <li>Z tej liczby wyprowadzane są: tempa treningowe (5 stref) i prognozy wyników</li>
+  </ol>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cecha</th><th>VO2max (laboratorium)</th><th>VDOT (z biegu)</th></tr></thead>
+      <tbody>
+        <tr><td>Pomiar</td><td>Maska, bieżnia, laboratorium</td><td>Wynik z zawodów</td></tr>
+        <tr><td>Co mierzy</td><td>Tylko max zużycie tlenu</td><td>VO2max + ekonomia + próg</td></tr>
+        <tr><td>Koszt</td><td>200–500 PLN za test</td><td>Darmowy</td></tr>
+        <tr><td>Aktualizacja</td><td>Kolejna wizyta w laboratorium</td><td>Po każdym biegu startowym</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>VDOT 27.9 — Twoje prognozy</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dystans</th><th>Prognozowany czas</th><th>Tempo</th></tr></thead>
+      <tbody>
+        <tr><td>5 km</td><td>~35:30</td><td>~7:06 min/km</td></tr>
+        <tr><td>10 km</td><td>~1:13:45</td><td>~7:23 min/km</td></tr>
+        <tr><td><strong>Półmaraton</strong></td><td><strong>2:30:03</strong></td><td><strong>7:07 min/km</strong></td></tr>
+        <tr><td>Maraton</td><td>~5:07:00</td><td>~7:17 min/km</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box warn">
+    <strong>Aktualizuj VDOT co 4–6 tygodni</strong>
+    Pobiegnij 5 km lub 10 km na czas, wpisz wynik do kalkulatora i zaktualizuj tempa. Nigdy nie trenuj na podstawie VDOT docelowego — zawsze na podstawie aktualnego wyniku.
+  </div>
+</section>
+
+<!-- ═══ STREFY TRENINGOWE ═══ -->
+<section id="strefy">
+  <h2>STREFY TRENINGOWE <span class="badge badge-green">VDOT 27.9</span></h2>
+  <p class="section-lead">Każda strefa ma jeden cel fizjologiczny. 80% treningu to Easy — reszta to jakość.</p>
+
+  <div class="zone-bar">
+    <div class="zb-1">E ~80%</div>
+    <div class="zb-2">M</div>
+    <div class="zb-3">T ~10%</div>
+    <div class="zb-4">I ~8%</div>
+    <div class="zb-5">R ~5%</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Strefa</th><th>Tempo</th><th>% VO2max</th><th>Odczucie</th><th>Cel</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-green">Easy (E)</span></td>
+          <td><strong>7:20 – 8:02</strong> /km</td>
+          <td>59–74%</td>
+          <td>Konwersacyjne — swobodna rozmowa</td>
+          <td>Baza tlenowa, serce</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-blue">Marathon (M)</span></td>
+          <td><strong>7:15</strong> /km</td>
+          <td>75–84%</td>
+          <td>Umiarkowane, stabilne</td>
+          <td>Tempo maratońskie</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-yellow">Threshold (T)</span></td>
+          <td><strong>6:27</strong> /km</td>
+          <td>83–88%</td>
+          <td>Komfortowo trudne — max 2–3 słowa</td>
+          <td>Próg mleczanowy</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-orange">Interval (I)</span></td>
+          <td><strong>5:40</strong> /km</td>
+          <td>95–100%</td>
+          <td>Bardzo ciężkie</td>
+          <td>VO2max</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">Repetition (R)</span></td>
+          <td><strong>5:25</strong> /km</td>
+          <td>&gt;100%</td>
+          <td>Maksymalne — pełna szybkość</td>
+          <td>Szybkość, ekonomia</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-btn">Easy (E) — 80% treningu, fundament wszystkiego</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p><strong>Tempo:</strong> 7:20 – 8:02 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 65–79% HRmax (124–151 bpm)</p>
+        <p>Przy niskiej intensywności serce wypełnia się maksymalnie krwią, co wymusza silniejsze skurcze. To buduje pojemność wyrzutową serca — fundament wydolności.</p>
+        <p><strong>Najczęstszy błąd:</strong> Bieganie zbyt szybko. Jeśli nie możesz swobodnie rozmawiać — zwalniaj!</p>
+        <p><strong>Typowy trening:</strong> 30–60 min spokojnego biegu. Bieg długi to ta sama intensywność, ale dłuższy czas (max 2:30 h).</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">Marathon (M) — tempo maratońskie</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p><strong>Tempo:</strong> 7:15 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 80–90% HRmax (153–172 bpm)</p>
+        <p>Wstawki w tempie maratońskim podczas biegu długiego. Buduje pewność do utrzymywania tempa. Max 20% tygodniowego kilometrażu, max 1:50 na sesję.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">Threshold (T) — próg mleczanowy, „komfortowo trudne"</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p><strong>Tempo:</strong> 6:27 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 88–92% HRmax (168–176 bpm)</p>
+        <p>Tempo, które możesz utrzymać ok. 60 minut. Dwa formaty:</p>
+        <p>1. <strong>Tempo run</strong> — ciągły bieg 20–30 min (buduje psychikę)<br>
+        2. <strong>Cruise intervals</strong> — 4×5 min z 1 min przerwy (większa objętość, mniejszy stres)</p>
+        <p>Max 10% tygodniowego kilometrażu.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">Interval (I) — interwały VO2max</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p><strong>Tempo:</strong> 5:40 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 98–100% HRmax (187–191 bpm)</p>
+        <p>Biegacz wytrzymuje ok. 11 min na VO2max, ale dojście zajmuje 90–120 sekund. Interwały z niepełnym odpoczynkiem są skuteczniejsze.</p>
+        <p><strong>Typowy trening:</strong> 4–5 × 1 km, 3–4 min truchtania. Max 8% tygodniowego km.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">Repetition (R) — serie szybkościowe, technika</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p><strong>Tempo:</strong> 5:25 min/km &nbsp;|&nbsp; Zbyt krótkie odcinki na pomiar tętna</p>
+        <p>Szybkość, ekonomia biegu, siła nerwowo-mięśniowa. Odpoczynek 2–3× dłuższy niż powtórka.</p>
+        <p><strong>Typowy trening:</strong> 6–8 × 200 m w tempie R, 200 m truchtania. Lub: 6 × 20 sek przebieżek na koniec biegu Easy.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PLAN TRENINGOWY ═══ -->
+<section id="plan">
+  <h2>PLAN TRENINGOWY <span class="badge badge-purple">3 dni / tydzień</span></h2>
+  <p class="section-lead">Szkoła amerykańska, VDOT 27.9. Każdy trening ma jeden cel. Tempa precyzyjnie na zegarku Garmin.</p>
+
+  <div class="training-day day-1">
+    <h4>Dzień 1: Baza + Rytmy</h4>
+    <div class="meta">
+      <span class="tag tag-green">Easy + Repetition</span>
+      Cel: fundament tlenowy + technika biegowa
+    </div>
+    <ul>
+      <li><strong>40–50 min</strong> spokojnego biegu w tempie <strong>7:20 – 8:02 min/km</strong> (strefa Easy)</li>
+      <li>Na koniec: <strong>6 × 20 sekund</strong> szybkiego, technicznego biegu w tempie ~<strong>5:25 min/km</strong></li>
+      <li>Przerwa między rytmami: 1–1.5 min trucht/marsz do pełnego oddechu</li>
+    </ul>
+    <div class="info-box">
+      <strong>Rytmy to nie sprint!</strong>
+      Ładny technicznie bieg na ok. 85–90% — wysoko unoszone kolana, praca rąk. Poprawiają ekonomię biegu bez kwasu mlekowego.
+    </div>
+  </div>
+
+  <div class="training-day day-2">
+    <h4>Dzień 2: Kilometrówki (Interval)</h4>
+    <div class="meta">
+      <span class="tag tag-orange">Interval</span>
+      Cel: trening VO2max — pułap tlenowy
+    </div>
+    <ul>
+      <li><strong>15 min rozgrzewki</strong> w tempie Easy (7:20–8:02 min/km) + gimnastyka dynamiczna</li>
+      <li><strong>4 × 1 km</strong> w tempie <strong>5:40 min/km</strong> (ani szybciej, ani wolniej!)</li>
+      <li>Przerwa: <strong>4–4:30 min</strong> marszu lub bardzo wolnego truchtania</li>
+      <li><strong>10 min schłodzenia</strong> w tempie Easy</li>
+    </ul>
+    <div class="info-box">
+      <strong>Zasada amerykańska</strong>
+      Czas przerwy ≈ czas wysiłku. 1 km w 5:40 → przerwa 4–5 min (trucht). Maksymalizujesz czas przebywania w pułapie tlenowym.
+    </div>
+  </div>
+
+  <div class="training-day day-3">
+    <h4>Dzień 3: Próg mleczanowy (Cruise Intervals)</h4>
+    <div class="meta">
+      <span class="tag tag-red">Threshold</span>
+      Cel: podniesienie progu zmęczenia
+    </div>
+    <ul>
+      <li><strong>10–15 min rozgrzewki</strong> w tempie Easy (trucht)</li>
+      <li><strong>4 × 5 min</strong> (lub 3 × 7 min) w tempie <strong>6:27 min/km</strong></li>
+      <li>Przerwa: <strong>60 sekund</strong> wolnego truchtania (kwas mlekowy nie zdąży zniknąć!)</li>
+      <li><strong>10 min schłodzenia</strong> w tempie Easy</li>
+    </ul>
+    <div class="info-box">
+      <strong>Cruise Intervals (Daniels)</strong>
+      Zamiast ciągłego progu 25 min, dzielisz na krótsze odcinki z ultraskrótką przerwą. Psychicznie łatwiejsze, fizjologicznie równie skuteczne.
+    </div>
+  </div>
+
+  <h3>Typowy tydzień</h3>
+  <div class="table-wrap">
+    <table class="week-table">
+      <thead><tr><th>Dzień</th><th>Trening</th><th>Tempo</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Poniedziałek</td><td><span class="tag tag-green">Baza + Rytmy</span></td><td>7:20–8:02 + 5:25 /km</td><td>~55 min</td></tr>
+        <tr><td>Wtorek</td><td colspan="3" style="color:var(--text-light)">Odpoczynek / spacer / stretching</td></tr>
+        <tr><td>Środa</td><td><span class="tag tag-orange">Kilometrówki</span></td><td>5:40 /km</td><td>~45 min</td></tr>
+        <tr><td>Czwartek</td><td colspan="3" style="color:var(--text-light)">Odpoczynek</td></tr>
+        <tr><td>Piątek</td><td><span class="tag tag-red">Próg (Cruise)</span></td><td>6:27 /km</td><td>~40 min</td></tr>
+        <tr><td>Sob–Nd</td><td colspan="3" style="color:var(--text-light)">Odpoczynek / aktywna regeneracja</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ STREFY TĘTNA ═══ -->
+<section id="tetno">
+  <h2>STREFY TĘTNA <span class="badge badge-orange">Spersonalizowane</span></h2>
+  <p class="section-lead">Kobieta, 25 lat, 77 kg, 180 cm. HRmax (Tanaka): 208 − (0.7 × 25) = <strong>191 bpm</strong></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Strefa</th><th>% HRmax</th><th>Tętno (bpm)</th><th>Odczucie</th><th>Daniels</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-green">1 — Regeneracja</span></td>
+          <td>50–60%</td><td><strong>95 – 114</strong></td>
+          <td>Bardzo luźny trucht</td><td>Rozgrzewka / schłodzenie</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-green">2 — Baza tlenowa</span></td>
+          <td>60–75%</td><td><strong>115 – 143</strong></td>
+          <td>Konwersacyjne</td><td>Easy (E)</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-yellow">3 — Tempo</span></td>
+          <td>75–82%</td><td><strong>144 – 156</strong></td>
+          <td>Umiarkowany wysiłek</td><td>Marathon (M)</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-orange">4 — Próg</span></td>
+          <td>82–90%</td><td><strong>157 – 172</strong></td>
+          <td>Szybko, max 2–3 słowa</td><td>Threshold (T)</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-red">5 — Maksymalna</span></td>
+          <td>90–100%</td><td><strong>173 – 191</strong></td>
+          <td>Na maksa</td><td>Interval (I) / Rep (R)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="zone-bar">
+    <div class="zb-1">95–114</div>
+    <div class="zb-2">115–143</div>
+    <div class="zb-3">144–156</div>
+    <div class="zb-4">157–172</div>
+    <div class="zb-5">173–191</div>
+  </div>
+
+  <h3>Kalkulator stref tętna (Karvonen)</h3>
+  <p>Wzór Karvonena uwzględnia tętno spoczynkowe (RHR) — dokładniejszy niż prosty % HRmax.</p>
+
+  <div class="card" style="border-top:none">
+    <div class="card-body">
+      <div class="calc-form">
+        <div>
+          <label for="calc-age">Wiek (lata)</label>
+          <input type="number" id="calc-age" value="25" min="15" max="80">
+        </div>
+        <div>
+          <label for="calc-rhr">Tętno spoczynkowe (bpm)</label>
+          <input type="number" id="calc-rhr" value="65" min="30" max="120" placeholder="Zmierz rano po przebudzeniu">
+        </div>
+        <div>
+          <label for="calc-hrmax">HRmax (opcjonalnie)</label>
+          <input type="number" id="calc-hrmax" placeholder="Puste = wzór Tanaki">
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button class="btn" onclick="calcHR()">OBLICZ STREFY</button>
+        </div>
+      </div>
+      <div class="calc-result" id="calc-result">
+        <h4 style="margin-top:0;margin-bottom:12px;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:1px">Twoje strefy tętna</h4>
+        <p style="font-size:13px;color:var(--text-dim)" id="calc-meta"></p>
+        <div class="table-wrap" style="margin-top:12px">
+          <table id="calc-table">
+            <thead><tr><th>Strefa</th><th>% HRR</th><th>Tętno (bpm)</th><th>Zastosowanie</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Czynniki wpływające na tętno</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Czynnik</th><th>Wpływ</th></tr></thead>
+      <tbody>
+        <tr><td>Upał</td><td>+5–10 ud./min</td></tr>
+        <tr><td>Kofeina</td><td>+3–5 ud./min</td></tr>
+        <tr><td>Brak snu</td><td>+5–10 ud./min</td></tr>
+        <tr><td>Stres</td><td>+5–10 ud./min</td></tr>
+        <tr><td>Odwodnienie</td><td>+5–10 ud./min</td></tr>
+        <tr><td>Wysokość n.p.m.</td><td>+10–15 ud./min</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ OD ZERA DO 5KM ═══ -->
+<section id="poczatkujacy">
+  <h2>OD ZERA DO 5 KM <span class="badge badge-yellow">10 tygodni</span></h2>
+  <p class="section-lead">Plan marszobiegu dla początkujących. 3 treningi/tydzień, co drugi dzień. Tempo konwersacyjne — nie ważne jak wolno!</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tydzień</th><th>Trening (powtórz 3×/tyg.)</th><th>Łączny czas</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1 min biegu + 2 min marszu × 7</td><td>21 min</td></tr>
+        <tr><td>2</td><td>2 min biegu + 2 min marszu × 6</td><td>24 min</td></tr>
+        <tr><td>3</td><td>3 min biegu + 2 min marszu × 5</td><td>25 min</td></tr>
+        <tr><td>4</td><td>4 min biegu + 2 min marszu × 4</td><td>24 min</td></tr>
+        <tr><td>5</td><td>5 min biegu + 2 min marszu × 4</td><td>28 min</td></tr>
+        <tr><td>6</td><td>7 min biegu + 2 min marszu × 3</td><td>27 min</td></tr>
+        <tr><td>7</td><td>10 min biegu + 2 min marszu × 2 + 5 min biegu</td><td>29 min</td></tr>
+        <tr><td>8</td><td>12 min biegu + 2 min marszu + 12 min biegu</td><td>26 min</td></tr>
+        <tr><td>9</td><td>20 min ciągłego biegu</td><td>20 min</td></tr>
+        <tr><td><strong>10</strong></td><td><strong>25–30 min ciągłego biegu (~3.5–5 km)</strong></td><td><strong>25–30 min</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Zasady</h3>
+  <ul style="padding-left:20px;margin-bottom:24px">
+    <li>Wolniej = lepiej. Tempo nie ma znaczenia</li>
+    <li>Powtórz tydzień, jeśli czujesz, że jest za trudno</li>
+    <li>Nigdy nie biegnij 2 dni z rzędu — ciało potrzebuje 48 h na regenerację</li>
+    <li>5 min marszu przed i po treningu (rozgrzewka / schłodzenie)</li>
+    <li>Zainwestuj w buty biegowe (200–500 PLN)</li>
+  </ul>
+
+  <h3>Co dalej po 5 km?</h3>
+  <ol style="padding-left:20px">
+    <li>Pobiegnij 5 km na zawodach (np. parkrun — co sobota, darmowe)</li>
+    <li>Wpisz wynik do <a href="https://vdoto2.com/calculator/" target="_blank" rel="noopener">kalkulatora VDOT</a></li>
+    <li>Zacznij stosować strefy Danielsa: 80% Easy, reszta szybciej</li>
+    <li>Co 4–6 tygodni: nowy bieg na czas → aktualizuj VDOT</li>
+  </ol>
+</section>
+
+<!-- ═══ PROGRESJA I BŁĘDY ═══ -->
+<section id="progresja">
+  <h2>PROGRESJA I TYPOWE BŁĘDY</h2>
+
+  <h3>Zasady progresji (Daniels)</h3>
+  <div class="card" style="border-top:none">
+    <div class="card-body">
+      <ul style="padding-left:20px">
+        <li><strong>Objętość:</strong> Zwiększaj o 20–30%, utrzymaj 3–4 tygodnie, potem zwiększ ponownie</li>
+        <li><strong>Cykle 4-tygodniowe:</strong> Tydzień 1–3 normalne, tydzień 4 obniżona objętość (regeneracja)</li>
+        <li><strong>VDOT:</strong> Aktualizuj co 4–6 tygodni na podstawie nowego wyniku</li>
+        <li><strong>Nigdy</strong> nie trenuj na VDOT docelowym — zawsze na aktualnym</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>10 typowych błędów</h3>
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-btn">1. Zbyt szybkie bieganie treningów łatwych</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>80% amatorów biega Easy zbyt szybko. „Test rozmowy" — jeśli nie możesz wypowiedzieć pełnego zdania bez zadyszki, zwalniaj.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">2. Zbyt szybki wzrost objętości</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Entuzjazm → za dużo km → kontuzja w 3–6 tygodniu. Metoda Danielsa: zwiększ 20–30%, utrzymaj 3–4 tygodnie.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">3. Brak planu treningowego</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Nawet prosty plan (2 × Easy + 1 × szybciej) jest lepszy niż bieganie „na czuja".</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">4. Pomijanie rozgrzewki i schłodzenia</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>5–10 min marszu lub lekkiego truchtania na początku i końcu. Nie wchodź od razu na pełne tempo.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">5. Niewłaściwe obuwie</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Wizyta w specjalistycznym sklepie biegowym, analiza stopy. Wymiana co 600–800 km.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">6. Ignorowanie sygnałów ciała</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Ból ostry lub narastający = STOP. 2–3 dni przerwy to lepsze niż 2–3 miesiące rehabilitacji.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">7. Brak regeneracji</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Min. 1–2 dni odpoczynku w tygodniu. 7–9 h snu. Rozciąganie po treningu.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">8. Porównywanie się z innymi</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Daniels: „nie trenuj szybciej niż uzasadnia to Twój VDOT". Lepszy wynik = szybsze tempa.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">9. Trening na docelowym VDOT</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>„Chcę 2:00 na półmaratonie, więc trenuję tempa dla VDOT 35" — a aktualne to 28. Zawsze aktualny wynik.</p>
+      </div></div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn">10. Zbyt szybki start na zawodach</button>
+      <div class="accordion-body"><div class="accordion-body-inner">
+        <p>Adrenalina → pierwsze 2 km za szybko → „ściana" na 10. km. Pierwsza połowa 5–10 sek/km wolniej.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DZIENNIK TRENINGOWY ═══ -->
+<section id="garmin">
+  <h2>DZIENNIK TRENINGOWY <span class="badge badge-purple">Garmin</span></h2>
+  <p class="section-lead">Dodawaj treningi — dane zapisują się na serwerze. Wrzucaj screenshoty z Garmina.</p>
+
+  <!-- FORMULARZ -->
+  <div class="card" style="border-top: 4px solid var(--purple); margin-bottom: 28px;">
+    <div class="card-body">
+      <h4 style="margin-top:0;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Dodaj trening</h4>
+      <form id="entry-form" onsubmit="return submitEntry(event)">
+        <div class="calc-form" style="grid-template-columns:1fr 1fr 1fr">
+          <div>
+            <label for="entry-date">Data</label>
+            <input type="date" id="entry-date" required>
+          </div>
+          <div>
+            <label for="entry-distance">Dystans (km)</label>
+            <input type="number" id="entry-distance" step="0.01" min="0" placeholder="np. 5.2" required>
+          </div>
+          <div>
+            <label for="entry-time">Czas (hh:mm:ss)</label>
+            <input type="text" id="entry-time" placeholder="np. 38:12 lub 1:02:30" required>
+          </div>
+        </div>
+        <div class="calc-form" style="grid-template-columns:1fr 1fr;margin-top:0">
+          <div>
+            <label for="entry-type">Typ treningu</label>
+            <select id="entry-type">
+              <option value="">— wybierz —</option>
+              <option value="easy">Easy (Baza)</option>
+              <option value="easy+strides">Easy + Rytmy</option>
+              <option value="interval">Interval (Kilometrówki)</option>
+              <option value="threshold">Threshold (Próg)</option>
+              <option value="marathon">Marathon (Tempo)</option>
+              <option value="long">Bieg długi</option>
+              <option value="race">Zawody</option>
+              <option value="other">Inny</option>
+            </select>
+          </div>
+          <div>
+            <label for="entry-screenshot">Screenshot z Garmina</label>
+            <input type="file" id="entry-screenshot" accept="image/*" style="padding:9px 16px">
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <label for="entry-notes">Notatki (opcjonalnie)</label>
+          <input type="text" id="entry-notes" placeholder="np. Czułam się świetnie, pogoda 15°C" style="width:100%;padding:12px 16px;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);font-size:16px;font-family:inherit;color:var(--text)">
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;gap:12px">
+          <button type="submit" class="btn" id="submit-btn">DODAJ TRENING</button>
+          <span id="submit-status" style="font-size:14px;color:var(--green);display:none">Dodano!</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TABELA TRENINGÓW -->
+  <h3>Historia treningów</h3>
+  <div id="entries-empty" style="text-align:center;padding:40px 20px;color:var(--text-light);display:none">
+    Brak treningów. Dodaj pierwszy trening powyżej!
+  </div>
+  <div class="table-wrap" id="entries-table-wrap" style="display:none">
+    <table id="entries-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Typ</th>
+          <th>Dystans</th>
+          <th>Czas</th>
+          <th>Tempo</th>
+          <th>Notatki</th>
+          <th>Screen</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="entries-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- STATYSTYKI -->
+  <div id="entries-stats" style="display:none;margin-top:24px">
+    <div class="stats" style="max-width:100%;padding:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      <div class="stat" id="stat-total" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Treningi</div>
+        <div class="value accent">0</div>
+      </div>
+      <div class="stat" id="stat-km" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Łącznie km</div>
+        <div class="value green">0</div>
+      </div>
+      <div class="stat" id="stat-time" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Łączny czas</div>
+        <div class="value">0h</div>
+      </div>
+      <div class="stat" id="stat-avg-pace" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Śr. tempo</div>
+        <div class="value orange">-</div>
+        <div class="unit">min/km</div>
+      </div>
+      <div class="stat" id="stat-avg-dist" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Śr. dystans</div>
+        <div class="value">-</div>
+        <div class="unit">km</div>
+      </div>
+      <div class="stat" id="stat-last" style="border-bottom:1px solid var(--border-light)">
+        <div class="label">Ostatni</div>
+        <div class="value" style="font-size:18px">-</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <p style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:rgba(255,255,255,.7);margin-bottom:8px">PRZEWODNIK PO BIEGANIU</p>
+  <p>System VDOT Jacka Danielsa &bull; Źródła: Daniels' Running Formula (4th ed.), vdoto2.com, trenujbieg.pl</p>
+</footer>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+/* NAV */
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+});
+
+/* ACCORDION */
+document.querySelectorAll('.accordion-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const body = item.querySelector('.accordion-body');
+    const isOpen = item.classList.contains('open');
+    item.parentElement.querySelectorAll('.accordion-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.accordion-body').style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  });
+});
+
+/* HR CALCULATOR */
+function calcHR() {
+  const age = parseInt(document.getElementById('calc-age').value);
+  const rhr = parseInt(document.getElementById('calc-rhr').value);
+  const hrmaxInput = document.getElementById('calc-hrmax').value;
+  const hrmax = hrmaxInput ? parseInt(hrmaxInput) : Math.round(208 - 0.7 * age);
+  const hrr = hrmax - rhr;
+  const zones = [
+    { name: '1 — Regeneracyjna', pct: [50, 60], use: 'Rozgrzewka, schłodzenie' },
+    { name: '2 — Tlenowa (Easy)', pct: [60, 70], use: 'Bieg łatwy, baza' },
+    { name: '3 — Aerobowa (Marathon)', pct: [70, 80], use: 'Tempo maratońskie' },
+    { name: '4 — Progowa (Threshold)', pct: [80, 90], use: 'Próg mleczanowy' },
+    { name: '5 — Maksymalna (Interval)', pct: [90, 100], use: 'VO2max, interwały' }
+  ];
+  const tbody = document.querySelector('#calc-table tbody');
+  tbody.innerHTML = '';
+  zones.forEach(z => {
+    const low = Math.round(rhr + hrr * z.pct[0] / 100);
+    const high = Math.round(rhr + hrr * z.pct[1] / 100);
+    tbody.innerHTML += '<tr><td>' + z.name + '</td><td>' + z.pct[0] + '–' + z.pct[1] + '%</td><td><strong>' + low + ' – ' + high + '</strong></td><td>' + z.use + '</td></tr>';
+  });
+  document.getElementById('calc-meta').textContent =
+    'HRmax: ' + hrmax + ' bpm (' + (hrmaxInput ? 'podane' : 'wzór Tanaki') + ') | RHR: ' + rhr + ' bpm | Rezerwa tętna: ' + hrr + ' bpm';
+  document.getElementById('calc-result').style.display = 'block';
+}
+
+/* TRAINING LOG — API */
+var TYPE_LABELS = {
+  'easy': 'Easy', 'easy+strides': 'Easy + Rytmy', 'interval': 'Interval',
+  'threshold': 'Threshold', 'marathon': 'Marathon', 'long': 'Bieg długi',
+  'race': 'Zawody', 'other': 'Inny', '': '—'
+};
+var TYPE_COLORS = {
+  'easy': 'tag-green', 'easy+strides': 'tag-green', 'interval': 'tag-orange',
+  'threshold': 'tag-red', 'marathon': 'tag-blue', 'long': 'tag-blue',
+  'race': 'tag-purple', 'other': 'tag-yellow', '': ''
+};
+
+/* Set default date to today */
+document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+
+function calcPace(distKm, timeStr) {
+  if (!distKm || !timeStr || distKm <= 0) return '';
+  var parts = timeStr.split(':').map(Number);
+  var totalSec = 0;
+  if (parts.length === 3) totalSec = parts[0]*3600 + parts[1]*60 + parts[2];
+  else if (parts.length === 2) totalSec = parts[0]*60 + parts[1];
+  else return '';
+  var paceSecPerKm = totalSec / distKm;
+  var m = Math.floor(paceSecPerKm / 60);
+  var s = Math.round(paceSecPerKm % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function formatDate(dateStr) {
+  var d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function timeToMinutes(timeStr) {
+  if (!timeStr) return 0;
+  var parts = timeStr.split(':').map(Number);
+  if (parts.length === 3) return parts[0]*60 + parts[1] + parts[2]/60;
+  if (parts.length === 2) return parts[0] + parts[1]/60;
+  return 0;
+}
+
+function renderEntries(entries) {
+  var tbody = document.getElementById('entries-tbody');
+  var tableWrap = document.getElementById('entries-table-wrap');
+  var emptyEl = document.getElementById('entries-empty');
+  var statsEl = document.getElementById('entries-stats');
+
+  if (!entries.length) {
+    tableWrap.style.display = 'none';
+    emptyEl.style.display = 'block';
+    statsEl.style.display = 'none';
+    return;
+  }
+
+  tableWrap.style.display = 'block';
+  emptyEl.style.display = 'none';
+  statsEl.style.display = 'block';
+  tbody.innerHTML = '';
+
+  var totalKm = 0, totalMin = 0;
+
+  entries.forEach(function(e) {
+    var pace = e.pace || calcPace(parseFloat(e.distance), e.time);
+    var dist = parseFloat(e.distance) || 0;
+    totalKm += dist;
+    totalMin += timeToMinutes(e.time);
+
+    var screencol = '';
+    if (e.screenshot) {
+      screencol = '<img src="/uploads/' + e.screenshot + '" alt="screen" ' +
+        'style="width:48px;height:48px;object-fit:cover;border-radius:4px;cursor:pointer;border:1px solid var(--border)" ' +
+        'onclick="document.getElementById(\'lightbox-img\').src=\'/uploads/' + e.screenshot + '\';document.getElementById(\'lightbox\').classList.add(\'open\')">';
+    }
+
+    var typeTag = e.type ? '<span class="tag ' + (TYPE_COLORS[e.type]||'') + '">' + (TYPE_LABELS[e.type]||e.type) + '</span>' : '—';
+
+    tbody.innerHTML += '<tr>' +
+      '<td style="white-space:nowrap;font-weight:600">' + formatDate(e.date) + '</td>' +
+      '<td>' + typeTag + '</td>' +
+      '<td><strong>' + (e.distance || '—') + '</strong> km</td>' +
+      '<td>' + (e.time || '—') + '</td>' +
+      '<td style="color:var(--orange);font-weight:600">' + (pace || '—') + '</td>' +
+      '<td style="max-width:180px;font-size:13px;color:var(--text-dim)">' + (e.notes || '') + '</td>' +
+      '<td>' + screencol + '</td>' +
+      '<td><button onclick="deleteEntry(\'' + e.id + '\')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:4px" title="Usuń">&times;</button></td>' +
+      '</tr>';
+  });
+
+  /* Stats */
+  document.querySelector('#stat-total .value').textContent = entries.length;
+  document.querySelector('#stat-km .value').textContent = totalKm.toFixed(1);
+  var hours = Math.floor(totalMin / 60);
+  var mins = Math.round(totalMin % 60);
+  document.querySelector('#stat-time .value').textContent = hours + 'h ' + mins + 'm';
+  if (totalKm > 0) {
+    var avgPaceSec = (totalMin * 60) / totalKm;
+    var pm = Math.floor(avgPaceSec / 60);
+    var ps = Math.round(avgPaceSec % 60);
+    document.querySelector('#stat-avg-pace .value').textContent = pm + ':' + (ps < 10 ? '0' : '') + ps;
+    document.querySelector('#stat-avg-dist .value').textContent = (totalKm / entries.length).toFixed(1);
+  }
+  document.querySelector('#stat-last .value').textContent = formatDate(entries[0].date);
+}
+
+function loadEntries() {
+  fetch('/api/entries')
+    .then(function(r) { return r.json(); })
+    .then(renderEntries)
+    .catch(function(err) { console.error('Błąd ładowania:', err); });
+}
+
+function submitEntry(e) {
+  e.preventDefault();
+  var btn = document.getElementById('submit-btn');
+  var status = document.getElementById('submit-status');
+  btn.disabled = true;
+  btn.textContent = 'ZAPISUJĘ...';
+
+  var dist = document.getElementById('entry-distance').value;
+  var time = document.getElementById('entry-time').value;
+  var pace = calcPace(parseFloat(dist), time);
+
+  var fd = new FormData();
+  fd.append('date', document.getElementById('entry-date').value);
+  fd.append('distance', dist);
+  fd.append('time', time);
+  fd.append('pace', pace);
+  fd.append('type', document.getElementById('entry-type').value);
+  fd.append('notes', document.getElementById('entry-notes').value);
+
+  var fileInput = document.getElementById('entry-screenshot');
+  if (fileInput.files[0]) fd.append('screenshot', fileInput.files[0]);
+
+  fetch('/api/entries', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      btn.disabled = false;
+      btn.textContent = 'DODAJ TRENING';
+      status.style.display = 'inline';
+      setTimeout(function() { status.style.display = 'none'; }, 2000);
+      document.getElementById('entry-form').reset();
+      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+      loadEntries();
+    })
+    .catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'DODAJ TRENING';
+      alert('Błąd zapisu: ' + err.message);
+    });
+
+  return false;
+}
+
+function deleteEntry(id) {
+  if (!confirm('Usunąć ten trening?')) return;
+  fetch('/api/entries/' + id, { method: 'DELETE' })
+    .then(function() { loadEntries(); })
+    .catch(function(err) { alert('Błąd: ' + err.message); });
+}
+
+loadEntries();
+</script>
+</body>
+</html>
