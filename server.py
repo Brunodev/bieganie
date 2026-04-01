@@ -19,8 +19,10 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
 DATA_DIR = os.environ.get('DATA_DIR', '/data/bieganie')
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOADS_DIR = os.path.join(DATA_DIR, 'uploads')
 os.makedirs(UPLOADS_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
@@ -30,7 +32,10 @@ log = logging.getLogger(__name__)
 
 @app.route('/')
 def index():
-    return send_from_directory(DATA_DIR, 'index.html')
+    # Serwuj z /data/bieganie jeśli tam jest, inaczej z katalogu aplikacji
+    if os.path.exists(os.path.join(DATA_DIR, 'index.html')):
+        return send_from_directory(DATA_DIR, 'index.html')
+    return send_from_directory(APP_DIR, 'index.html')
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
