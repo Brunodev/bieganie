@@ -20,7 +20,7 @@ from database import upsert_activity, log_sync_start, log_sync_finish
 
 log = logging.getLogger(__name__)
 
-TOKENSTORE = os.environ.get('GARMIN_TOKENSTORE', '/data/bieganie/.garmin_tokens')
+TOKENSTORE = os.environ.get('GARMIN_TOKENSTORE', '/app/data/.garmin_tokens')
 
 
 def get_garmin_client() -> Garmin:

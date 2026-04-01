@@ -18,8 +18,8 @@ from vdot import calculate_vdot, training_paces, seconds_to_pace, format_duratio
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
-DATA_DIR = os.environ.get('DATA_DIR', '/data/bieganie')
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.environ.get('DATA_DIR', os.path.join(APP_DIR, 'data'))
 UPLOADS_DIR = os.path.join(DATA_DIR, 'uploads')
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)

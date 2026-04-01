@@ -6,7 +6,7 @@ import json
 import os
 from datetime import datetime
 
-DB_PATH = os.environ.get('DB_PATH', '/data/bieganie/bieganie.db')
+DB_PATH = os.environ.get('DB_PATH', '/app/data/bieganie.db')
 
 
 def get_db():

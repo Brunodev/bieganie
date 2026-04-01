@@ -4,6 +4,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY server.py vdot.py database.py garmin_sync.py index.html ./
-ENV DATA_DIR=/data/bieganie
+RUN mkdir -p /app/data
 EXPOSE 5000
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "--preload", "server:app"]
