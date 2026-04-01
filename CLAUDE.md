@@ -26,24 +26,27 @@ Personalny przewodnik po bieganiu dla partnerki Mikołaja. System VDOT Jacka Dan
 | 4 Próg | 157–172 |
 | 5 Maksymalna | 173–191 |
 
-## Hosting
+## Hosting — ZAWSZE PRZEZ COOLIFY + GITHUB
 - **URL:** https://bieganie.nocodework.pl
 - **Serwer:** serwer1 (204.168.178.238)
-- **Kontener:** `bieganie-app` (ręczny docker run, NIE przez Coolify)
-- **Technologia:** Python Flask (gunicorn) — serwuje HTML + API
-- **Traefik labels:** automatyczny HTTPS via coolify-proxy
+- **Coolify UUID:** `kh79yxgsf0pq5uq0s5xeai3q`
+- **Projekt:** Strony statyczne (`lpwjdtu7bn336kszd63ma52y`)
+- **Build pack:** Dockerfile (z GitHub)
+- **GitHub repo:** https://github.com/Brunodev/bieganie (publiczne)
+- **Branch:** main
+- **Deploy:** Coolify buduje obraz z Dockerfile i deployuje automatycznie
 - **DNS:** wildcard `*.nocodework.pl` → serwer1 (automatycznie)
-- **Coolify:** app `uldkyvseufswahkowrcut2a0` jest ZATRZYMANA (zastąpiona kontenerem ręcznym)
 
-## Dane na serwerze
+**WAŻNE: NIGDY nie deployuj ręcznym docker run. Zawsze przez GitHub + Coolify.**
+
+## Dane w kontenerze
 | Ścieżka | Opis |
 |---------|------|
-| `/data/bieganie/index.html` | Strona HTML |
-| `/data/bieganie/server.py` | Flask API server |
-| `/data/bieganie/Dockerfile` | Obraz Docker |
-| `/data/bieganie/requirements.txt` | Zależności (flask, gunicorn) |
-| `/data/bieganie/entries.json` | Baza danych treningów (JSON) |
-| `/data/bieganie/uploads/` | Screenshoty z Garmina |
+| `/app/index.html` | Strona HTML (z GitHub, w obrazie Docker) |
+| `/app/server.py` | Flask API (z GitHub, w obrazie) |
+| `/app/data/bieganie.db` | SQLite baza (persistent w kontenerze) |
+| `/app/data/uploads/` | Screenshoty z Garmina |
+| `/app/data/.garmin_tokens/` | Tokeny Garmin Connect |
 
 ## API Endpoints
 | Metoda | URL | Opis |
@@ -54,35 +57,31 @@ Personalny przewodnik po bieganiu dla partnerki Mikołaja. System VDOT Jacka Dan
 | DELETE | `/api/entries/{id}` | Usuń trening |
 | GET | `/uploads/{filename}` | Screenshot z Garmina |
 
-## Deploy / Aktualizacja
+## Deploy / Aktualizacja — ZAWSZE PRZEZ GITHUB
 ```bash
-# 1. Upload plików na serwer
-scp -i ~/.ssh/Hetzner_ index.html server.py deploy@100.119.224.115:/data/bieganie/
+# 1. Edytuj pliki lokalnie (Hetzner/bieganie/)
+# 2. Commit + push na GitHub
+cd /Users/mikolajbrunka/Pliki/Asystent/Hetzner/bieganie
+git add -A && git commit -m "opis zmiany" && git push
 
-# 2. Jeśli zmienił się tylko HTML — restart nie potrzebny (Flask serwuje z /data/bieganie/)
-# 3. Jeśli zmienił się server.py lub Dockerfile — rebuild:
-ssh -i ~/.ssh/Hetzner_ deploy@100.119.224.115 "cd /data/bieganie && \
-  sudo docker build -t bieganie-app . && \
-  sudo docker stop bieganie-app && sudo docker rm bieganie-app && \
-  sudo docker run -d --name bieganie-app --restart unless-stopped \
-    --network coolify -v /data/bieganie:/data/bieganie \
-    -l 'traefik.enable=true' \
-    -l 'traefik.http.routers.bieganie-https.rule=Host(\`bieganie.nocodework.pl\`)' \
-    -l 'traefik.http.routers.bieganie-https.entrypoints=https' \
-    -l 'traefik.http.routers.bieganie-https.tls=true' \
-    -l 'traefik.http.routers.bieganie-http.rule=Host(\`bieganie.nocodework.pl\`)' \
-    -l 'traefik.http.routers.bieganie-http.entrypoints=http' \
-    -l 'traefik.http.services.bieganie.loadbalancer.server.port=5000' \
-    bieganie-app"
+# 3. Redeploy w Coolify (API lub UI)
+source /Users/mikolajbrunka/Pliki/Asystent/Hetzner/.env
+curl -s -X GET "${COOLIFY_URL}/api/v1/applications/kh79yxgsf0pq5uq0s5xeai3q/restart" \
+  -H "Authorization: Bearer ${COOLIFY_TOKEN}"
 ```
 
-## Pliki lokalne
+**NIGDY** nie rób ręcznego `docker run` ani `docker cp`. Kod idzie z GitHub → Coolify buduje → Coolify deployuje.
+
+## Pliki (Git repo: Brunodev/bieganie)
 | Plik | Opis |
 |------|------|
 | `index.html` | Strona — przewodnik + dziennik treningowy |
-| `server.py` | Flask API (serwuje HTML + API + uploads) |
-| `Dockerfile` | Python 3.12 alpine + Flask + gunicorn |
-| `requirements.txt` | flask, gunicorn |
+| `server.py` | Flask API (serwuje HTML + API + uploads + auto-sync co 3h) |
+| `database.py` | SQLite baza (aktywności, manual entries, sync log) |
+| `garmin_sync.py` | Sync z Garmin Connect (python-garminconnect) |
+| `vdot.py` | Obliczanie VDOT ze wzoru Danielsa-Gilberta |
+| `Dockerfile` | Python 3.12-slim + Flask + gunicorn + garminconnect |
+| `requirements.txt` | flask, gunicorn, garminconnect, curl_cffi |
 | `CLAUDE.md` | Ten plik |
 
 ## Zawartość strony
