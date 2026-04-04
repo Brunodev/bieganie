@@ -236,18 +236,18 @@ import threading
 import time as _time
 
 def auto_sync_loop():
-    """Background thread — sync co 3 godziny."""
-    INTERVAL = 3 * 3600  # 3h
-    _time.sleep(60)  # czekaj minutę po starcie
+    """Background thread — sync co 6 godzin (ostrożnie z rate limits)."""
+    INTERVAL = 6 * 3600  # 6h — Garmin jest restrykcyjny
+    _time.sleep(300)  # czekaj 5 min po starcie
     while True:
         try:
-            if os.environ.get('GARMIN_EMAIL'):
+            if os.environ.get('GARMIN_EMAIL') and os.environ.get('AUTO_SYNC', '1') == '1':
                 log.info("Auto-sync: rozpoczynam...")
                 from garmin_sync import sync_activities
                 result = sync_activities(count=50)
                 log.info(f"Auto-sync: {result}")
             else:
-                log.info("Auto-sync: brak GARMIN_EMAIL, pomijam")
+                log.info("Auto-sync: wyłączony lub brak credentials")
         except Exception as e:
             log.error(f"Auto-sync error: {e}")
         _time.sleep(INTERVAL)
