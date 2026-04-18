@@ -940,7 +940,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
 
   <div class="info-box">
     <strong>Twój plan to hybryda</strong>
-    Bazę i rytmy z klasyki (polska + amerykańska), kilometrówki z amerykańskiej szkoły, próg w formacie Cruise Intervals z norweskiej. Docelowo trenujesz wg szkoły amerykańskiej (VDOT 27.9).
+    Bazę i rytmy z klasyki (polska + amerykańska), kilometrówki z amerykańskiej szkoły, próg w formacie Cruise Intervals z norweskiej. Docelowo trenujesz wg szkoły amerykańskiej.
   </div>
 </section>
 
@@ -971,15 +971,12 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     </table>
   </div>
 
-  <h3>VDOT 27.9 — Twoje prognozy</h3>
+  <h3 id="prognozy-header">VDOT -- — Twoje prognozy</h3>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Dystans</th><th>Prognozowany czas</th><th>Tempo</th></tr></thead>
-      <tbody>
-        <tr><td>5 km</td><td>~35:30</td><td>~7:06 min/km</td></tr>
-        <tr><td>10 km</td><td>~1:13:45</td><td>~7:23 min/km</td></tr>
-        <tr><td><strong>Półmaraton</strong></td><td><strong>2:30:03</strong></td><td><strong>7:07 min/km</strong></td></tr>
-        <tr><td>Maraton</td><td>~5:07:00</td><td>~7:17 min/km</td></tr>
+      <tbody id="prognozy-tbody">
+        <tr><td colspan="3" style="text-align:center;color:var(--text-light)">Ładowanie...</td></tr>
       </tbody>
     </table>
   </div>
@@ -1052,7 +1049,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     <div class="accordion-item">
       <button class="accordion-btn">Easy (E) — 80% treningu, fundament wszystkiego</button>
       <div class="accordion-body"><div class="accordion-body-inner">
-        <p><strong>Tempo:</strong> 7:20 – 8:02 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 65–79% HRmax (124–151 bpm)</p>
+        <p><strong>Tempo:</strong> <span id="acc-easy">--</span> min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 65–79% HRmax</p>
         <p>Przy niskiej intensywności serce wypełnia się maksymalnie krwią, co wymusza silniejsze skurcze. To buduje pojemność wyrzutową serca — fundament wydolności.</p>
         <p><strong>Najczęstszy błąd:</strong> Bieganie zbyt szybko. Jeśli nie możesz swobodnie rozmawiać — zwalniaj!</p>
         <p><strong>Typowy trening:</strong> 30–60 min spokojnego biegu. Bieg długi to ta sama intensywność, ale dłuższy czas (max 2:30 h).</p>
@@ -1061,14 +1058,14 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     <div class="accordion-item">
       <button class="accordion-btn">Marathon (M) — tempo maratońskie</button>
       <div class="accordion-body"><div class="accordion-body-inner">
-        <p><strong>Tempo:</strong> 7:15 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 80–90% HRmax (153–172 bpm)</p>
+        <p><strong>Tempo:</strong> <span id="acc-marathon">--</span> min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 80–90% HRmax</p>
         <p>Wstawki w tempie maratońskim podczas biegu długiego. Buduje pewność do utrzymywania tempa. Max 20% tygodniowego kilometrażu, max 1:50 na sesję.</p>
       </div></div>
     </div>
     <div class="accordion-item">
       <button class="accordion-btn">Threshold (T) — próg mleczanowy, „komfortowo trudne"</button>
       <div class="accordion-body"><div class="accordion-body-inner">
-        <p><strong>Tempo:</strong> 6:27 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 88–92% HRmax (168–176 bpm)</p>
+        <p><strong>Tempo:</strong> <span id="acc-threshold">--</span> min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 88–92% HRmax</p>
         <p>Tempo, które możesz utrzymać ok. 60 minut. Dwa formaty:</p>
         <p>1. <strong>Tempo run</strong> — ciągły bieg 20–30 min (buduje psychikę)<br>
         2. <strong>Cruise intervals</strong> — 4×5 min z 1 min przerwy (większa objętość, mniejszy stres)</p>
@@ -1078,7 +1075,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     <div class="accordion-item">
       <button class="accordion-btn">Interval (I) — interwały VO2max</button>
       <div class="accordion-body"><div class="accordion-body-inner">
-        <p><strong>Tempo:</strong> 5:40 min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 98–100% HRmax (187–191 bpm)</p>
+        <p><strong>Tempo:</strong> <span id="acc-interval">--</span> min/km &nbsp;|&nbsp; <strong>Tętno:</strong> 98–100% HRmax</p>
         <p>Biegacz wytrzymuje ok. 11 min na VO2max, ale dojście zajmuje 90–120 sekund. Interwały z niepełnym odpoczynkiem są skuteczniejsze.</p>
         <p><strong>Typowy trening:</strong> 4–5 × 1 km, 3–4 min truchtania. Max 8% tygodniowego km.</p>
       </div></div>
@@ -1086,7 +1083,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     <div class="accordion-item">
       <button class="accordion-btn">Repetition (R) — serie szybkościowe, technika</button>
       <div class="accordion-body"><div class="accordion-body-inner">
-        <p><strong>Tempo:</strong> 5:25 min/km &nbsp;|&nbsp; Zbyt krótkie odcinki na pomiar tętna</p>
+        <p><strong>Tempo:</strong> <span id="acc-rep">--</span> min/km &nbsp;|&nbsp; Zbyt krótkie odcinki na pomiar tętna</p>
         <p>Szybkość, ekonomia biegu, siła nerwowo-mięśniowa. Odpoczynek 2–3× dłuższy niż powtórka.</p>
         <p><strong>Typowy trening:</strong> 6–8 × 200 m w tempie R, 200 m truchtania. Lub: 6 × 20 sek przebieżek na koniec biegu Easy.</p>
       </div></div>
@@ -1097,7 +1094,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
 <!-- ═══ PLAN TRENINGOWY ═══ -->
 <section id="plan">
   <h2>PLAN TRENINGOWY <span class="badge badge-purple">3 dni / tydzień</span></h2>
-  <p class="section-lead">Szkoła amerykańska, VDOT 27.9. Każdy trening ma jeden cel. Tempa precyzyjnie na zegarku Garmin.</p>
+  <p class="section-lead">Szkoła amerykańska, VDOT <span id="plan-vdot">--</span>. Każdy trening ma jeden cel. Tempa precyzyjnie na zegarku Garmin.</p>
 
   <div class="training-day day-1">
     <h4>Dzień 1: Baza + Rytmy</h4>
@@ -1106,8 +1103,8 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
       Cel: fundament tlenowy + technika biegowa
     </div>
     <ul>
-      <li><strong>40–50 min</strong> spokojnego biegu w tempie <strong>7:20 – 8:02 min/km</strong> (strefa Easy)</li>
-      <li>Na koniec: <strong>6 × 20 sekund</strong> szybkiego, technicznego biegu w tempie ~<strong>5:25 min/km</strong></li>
+      <li><strong>40–50 min</strong> spokojnego biegu w tempie <strong id="plan-d1-easy">--</strong> min/km (strefa Easy)</li>
+      <li>Na koniec: <strong>6 × 20 sekund</strong> szybkiego, technicznego biegu w tempie ~<strong id="plan-d1-rep">--</strong> min/km</li>
       <li>Przerwa między rytmami: 1–1.5 min trucht/marsz do pełnego oddechu</li>
     </ul>
     <div class="info-box">
@@ -1123,14 +1120,14 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
       Cel: trening VO2max — pułap tlenowy
     </div>
     <ul>
-      <li><strong>15 min rozgrzewki</strong> w tempie Easy (7:20–8:02 min/km) + gimnastyka dynamiczna</li>
-      <li><strong>4 × 1 km</strong> w tempie <strong>5:40 min/km</strong> (ani szybciej, ani wolniej!)</li>
+      <li><strong>15 min rozgrzewki</strong> w tempie Easy (<span id="plan-d2-easy">--</span> min/km) + gimnastyka dynamiczna</li>
+      <li><strong>4 × 1 km</strong> w tempie <strong id="plan-d2-int">--</strong> min/km (ani szybciej, ani wolniej!)</li>
       <li>Przerwa: <strong>4–4:30 min</strong> marszu lub bardzo wolnego truchtania</li>
       <li><strong>10 min schłodzenia</strong> w tempie Easy</li>
     </ul>
     <div class="info-box">
       <strong>Zasada amerykańska</strong>
-      Czas przerwy ≈ czas wysiłku. 1 km w 5:40 → przerwa 4–5 min (trucht). Maksymalizujesz czas przebywania w pułapie tlenowym.
+      Czas przerwy ≈ czas wysiłku. 1 km w <span id="plan-d2-int2">--</span> → przerwa 4–5 min (trucht). Maksymalizujesz czas przebywania w pułapie tlenowym.
     </div>
   </div>
 
@@ -1142,7 +1139,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     </div>
     <ul>
       <li><strong>10–15 min rozgrzewki</strong> w tempie Easy (trucht)</li>
-      <li><strong>4 × 5 min</strong> (lub 3 × 7 min) w tempie <strong>6:27 min/km</strong></li>
+      <li><strong>4 × 5 min</strong> (lub 3 × 7 min) w tempie <strong id="plan-d3-thr">--</strong> min/km</li>
       <li>Przerwa: <strong>60 sekund</strong> wolnego truchtania (kwas mlekowy nie zdąży zniknąć!)</li>
       <li><strong>10 min schłodzenia</strong> w tempie Easy</li>
     </ul>
@@ -1157,11 +1154,11 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     <table class="week-table">
       <thead><tr><th>Dzień</th><th>Trening</th><th>Tempo</th><th>Czas</th></tr></thead>
       <tbody>
-        <tr><td>Poniedziałek</td><td><span class="tag tag-green">Baza + Rytmy</span></td><td>7:20–8:02 + 5:25 /km</td><td>~55 min</td></tr>
+        <tr><td>Poniedziałek</td><td><span class="tag tag-green">Baza + Rytmy</span></td><td><span id="week-d1">--</span></td><td>~55 min</td></tr>
         <tr><td>Wtorek</td><td colspan="3" style="color:var(--text-light)">Odpoczynek / spacer / stretching</td></tr>
-        <tr><td>Środa</td><td><span class="tag tag-orange">Kilometrówki</span></td><td>5:40 /km</td><td>~45 min</td></tr>
+        <tr><td>Środa</td><td><span class="tag tag-orange">Kilometrówki</span></td><td><span id="week-d2">--</span> /km</td><td>~45 min</td></tr>
         <tr><td>Czwartek</td><td colspan="3" style="color:var(--text-light)">Odpoczynek</td></tr>
-        <tr><td>Piątek</td><td><span class="tag tag-red">Próg (Cruise)</span></td><td>6:27 /km</td><td>~40 min</td></tr>
+        <tr><td>Piątek</td><td><span class="tag tag-red">Próg (Cruise)</span></td><td><span id="week-d3">--</span> /km</td><td>~40 min</td></tr>
         <tr><td>Sob–Nd</td><td colspan="3" style="color:var(--text-light)">Odpoczynek / aktywna regeneracja</td></tr>
       </tbody>
     </table>
@@ -1563,6 +1560,68 @@ function updateAllPaces(vdot) {
       if (p.threshold) document.getElementById('zt-threshold').textContent = p.threshold;
       if (p.interval) document.getElementById('zt-interval').textContent = p.interval;
       if (p.repetition) document.getElementById('zt-rep').textContent = p.repetition;
+      // Plan section
+      document.getElementById('plan-vdot').textContent = vdot;
+      if (p.easy) {
+        document.getElementById('plan-d1-easy').textContent = p.easy;
+        document.getElementById('plan-d2-easy').textContent = p.easy;
+      }
+      if (p.repetition) document.getElementById('plan-d1-rep').textContent = p.repetition;
+      if (p.interval) {
+        document.getElementById('plan-d2-int').textContent = p.interval;
+        document.getElementById('plan-d2-int2').textContent = p.interval;
+      }
+      if (p.threshold) document.getElementById('plan-d3-thr').textContent = p.threshold;
+      // Weekly table
+      if (p.easy && p.repetition) document.getElementById('week-d1').textContent = p.easy + ' + ' + p.repetition + ' /km';
+      if (p.interval) document.getElementById('week-d2').textContent = p.interval;
+      if (p.threshold) document.getElementById('week-d3').textContent = p.threshold;
+      // Accordion details
+      if (p.easy) document.getElementById('acc-easy').textContent = p.easy;
+      if (p.marathon) document.getElementById('acc-marathon').textContent = p.marathon;
+      if (p.threshold) document.getElementById('acc-threshold').textContent = p.threshold;
+      if (p.interval) document.getElementById('acc-interval').textContent = p.interval;
+      if (p.repetition) document.getElementById('acc-rep').textContent = p.repetition;
+    });
+
+  // Prognozy table — use VDOT calculator
+  fetch('/api/vdot/calculate?distance_m=5000&duration_s=' + Math.round(vdot > 0 ? 5000 / (vdot * 0.8) * 60 : 2100))
+    .then(function(){
+      // Build prognozy from VDOT estimation
+      var distances = [
+        {name:'5 km', m:5000}, {name:'10 km', m:10000},
+        {name:'Półmaraton', m:21097.5}, {name:'Maraton', m:42195}
+      ];
+      var tbody = document.getElementById('prognozy-tbody');
+      tbody.innerHTML = '';
+      document.getElementById('prognozy-header').textContent = 'VDOT ' + vdot + ' — Twoje prognozy';
+
+      distances.forEach(function(d) {
+        // Reverse VDOT formula to estimate time for each distance
+        // Use binary search to find duration that gives this VDOT
+        var lo = 60, hi = 36000, mid, calcVdot;
+        for (var i = 0; i < 50; i++) {
+          mid = (lo + hi) / 2;
+          var t = mid / 60;
+          var v = d.m / t;
+          var vo2 = -4.60 + 0.182258 * v + 0.000104 * v * v;
+          var pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t);
+          calcVdot = vo2 / pct;
+          if (calcVdot > vdot) hi = mid;
+          else lo = mid;
+        }
+        var secs = Math.round(mid);
+        var h = Math.floor(secs / 3600);
+        var m = Math.floor((secs % 3600) / 60);
+        var s = secs % 60;
+        var timeStr = h > 0 ? h + ':' + (m<10?'0':'') + m + ':' + (s<10?'0':'') + s : m + ':' + (s<10?'0':'') + s;
+        var paceSec = secs / (d.m / 1000);
+        var pm = Math.floor(paceSec / 60);
+        var ps = Math.round(paceSec % 60);
+        var paceStr = pm + ':' + (ps<10?'0':'') + ps + ' min/km';
+        var bold = d.m === 21097.5 ? 'font-weight:700' : '';
+        tbody.innerHTML += '<tr style="'+bold+'"><td>'+d.name+'</td><td>~'+timeStr+'</td><td>~'+paceStr+'</td></tr>';
+      });
     });
 }
 
@@ -1664,7 +1723,7 @@ function loadVdotChart() {
       markers:{size:5,strokeWidth:0},
       tooltip:{x:{format:'dd MMM yyyy'},theme:'light'},
       grid:{borderColor:'#e2e5ec'},
-      annotations:{yaxis:[{y:27.9,borderColor:'#16a34a',strokeDashArray:4,label:{text:'Cel: 27.9',style:{color:'#16a34a',background:'#ecfdf5'}}}]}
+      annotations:{yaxis:[{y:currentVdot||24.6,borderColor:'#16a34a',strokeDashArray:4,label:{text:'Aktualny: '+(currentVdot||'--'),style:{color:'#16a34a',background:'#ecfdf5'}}}]}
     }).render();
   });
 }
