@@ -108,14 +108,8 @@ def garmin_sync():
 @app.route('/api/garmin/status', methods=['GET'])
 def garmin_status():
     """Status połączenia z Garmin + ostatni sync."""
-    last_sync = db.get_last_sync()
-    token_exists = os.path.exists(os.path.join(
-        os.environ.get('GARMIN_TOKENSTORE', '/data/bieganie/.garmin_tokens'),
-        'garmin_tokens.json'
-    )) or os.path.exists(os.path.join(
-        os.environ.get('GARMIN_TOKENSTORE', '/data/bieganie/.garmin_tokens'),
-        'tokens'
-    ))
+    tokenstore = os.environ.get('GARMIN_TOKENSTORE', '/app/data/.garmin_tokens')
+    token_exists = os.path.exists(os.path.join(tokenstore, 'garmin_tokens.json'))
 
     has_credentials = bool(
         os.environ.get('GARMIN_EMAIL') and os.environ.get('GARMIN_PASSWORD')
@@ -124,9 +118,33 @@ def garmin_status():
     return jsonify({
         'connected': token_exists,
         'has_credentials': has_credentials,
-        'last_sync': last_sync,
+        'last_sync': db.get_last_sync(),
         'activity_count': db.get_activity_count()
     })
+
+@app.route('/api/garmin/login', methods=['POST'])
+def garmin_login():
+    """Jednorazowe logowanie z MFA kodem (POST { "mfa_code": "123456" })."""
+    try:
+        from garminconnect import Garmin as GarminClient
+        mfa_code = request.json.get('mfa_code') if request.is_json else None
+        email = os.environ.get('GARMIN_EMAIL')
+        password = os.environ.get('GARMIN_PASSWORD')
+        if not email or not password:
+            return jsonify({'error': 'Brak GARMIN_EMAIL/PASSWORD w env'}), 400
+
+        tokenstore = os.environ.get('GARMIN_TOKENSTORE', '/app/data/.garmin_tokens')
+        os.makedirs(tokenstore, exist_ok=True)
+
+        garmin = GarminClient(
+            email=email,
+            password=password,
+            prompt_mfa=lambda: mfa_code if mfa_code else '',
+        )
+        garmin.login(tokenstore)
+        return jsonify({'status': 'ok', 'message': 'Zalogowano i zapisano tokeny'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'error': str(e)}), 500
 
 @app.route('/api/garmin/vo2max', methods=['GET'])
 def garmin_vo2max():

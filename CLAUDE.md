@@ -35,6 +35,7 @@ Personalny przewodnik po bieganiu dla partnerki Mikołaja. System VDOT Jacka Dan
 - **GitHub repo:** https://github.com/Brunodev/bieganie (publiczne)
 - **Branch:** main
 - **Deploy:** Coolify buduje obraz z Dockerfile i deployuje automatycznie
+- **Webhook:** GitHub → Coolify (secret: `coolify-bieganie-2026`) — auto-build po `git push`
 - **DNS:** wildcard `*.nocodework.pl` → serwer1 (automatycznie)
 
 **WAŻNE: NIGDY nie deployuj ręcznym docker run. Zawsze przez GitHub + Coolify.**

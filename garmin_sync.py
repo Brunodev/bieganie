@@ -1,7 +1,7 @@
 """
 Sync danych z Garmin Connect.
-Używa python-garminconnect (nieoficjalna biblioteka).
-Loguje się jak aplikacja mobilna Garmin → pobiera dane → zapisuje do SQLite.
+Używa python-garminconnect 0.3.x (curl_cffi, natywny DI OAuth).
+garth NIE jest już używany — 0.3.x ma własne SSO z curl_cffi.
 """
 import os
 import json
@@ -26,43 +26,59 @@ TOKENSTORE = os.environ.get('GARMIN_TOKENSTORE', '/app/data/.garmin_tokens')
 def get_garmin_client() -> Garmin:
     """
     Zaloguj się do Garmin Connect.
-    Przy pierwszym logowaniu potrzebne GARMIN_EMAIL i GARMIN_PASSWORD.
-    Potem używa zapisanych tokenów (~1 rok ważności).
+    0.3.x: tokeny DI OAuth w garmin_tokens.json (~90 dni refresh).
+    Przy pierwszym logowaniu: GARMIN_EMAIL + GARMIN_PASSWORD + MFA kod.
     """
-    os.makedirs(TOKENSTORE, exist_ok=True)
-    token_file = os.path.join(TOKENSTORE, 'oauth1_token.json')
+    tokenstore_path = str(Path(TOKENSTORE).resolve())
+    os.makedirs(tokenstore_path, exist_ok=True)
 
-    # Próba logowania z zapisanych tokenów (tylko jeśli istnieją)
-    if os.path.exists(token_file):
-        try:
-            garmin = Garmin()
-            garmin.login(TOKENSTORE)
-            log.info("Zalogowano z zapisanych tokenów.")
-            return garmin
-        except (GarminConnectAuthenticationError, GarminConnectConnectionError):
-            log.warning("Tokeny wygasły, loguję z credentials...")
+    # Próba logowania z zapisanych tokenów
+    try:
+        garmin = Garmin()
+        garmin.login(tokenstore_path)
+        log.info("Zalogowano z zapisanych tokenów DI OAuth.")
+        return garmin
+    except (GarminConnectAuthenticationError, GarminConnectConnectionError, FileNotFoundError, Exception) as e:
+        log.warning(f"Tokeny niedostępne lub wygasły: {e}")
 
     # Logowanie z credentials
     email = os.environ.get('GARMIN_EMAIL')
     password = os.environ.get('GARMIN_PASSWORD')
     if not email or not password:
         raise ValueError(
-            "Brak tokenów Garmin. Ustaw GARMIN_EMAIL i GARMIN_PASSWORD w .env"
+            "Brak tokenów Garmin i brak credentials. "
+            "Ustaw GARMIN_EMAIL i GARMIN_PASSWORD."
+        )
+
+    # MFA: użyj GARMIN_MFA_CODE z env jeśli ustawiony
+    mfa_code_env = os.environ.get('GARMIN_MFA_CODE')
+
+    def mfa_callback():
+        if mfa_code_env:
+            log.info("Używam kodu MFA z GARMIN_MFA_CODE env.")
+            return mfa_code_env
+        raise ValueError(
+            "Konto wymaga MFA. Zaloguj się interaktywnie: "
+            "docker exec -it CONTAINER python3 -c \"from garminconnect import Garmin; "
+            "g=Garmin('email','pass',prompt_mfa=lambda:input('MFA: ')); "
+            "g.login('/app/data/.garmin_tokens')\""
         )
 
     log.info(f"Logowanie do Garmin jako {email}...")
-    garmin = Garmin(email=email, password=password)
-    garmin.login()
-    # Zapisz tokeny na przyszłość
-    garmin.garth.dump(TOKENSTORE)
-    log.info("Zalogowano i zapisano tokeny.")
+    garmin = Garmin(
+        email=email,
+        password=password,
+        prompt_mfa=mfa_callback,
+    )
+    garmin.login(tokenstore_path)
+    log.info("Zalogowano i zapisano tokeny DI OAuth.")
     return garmin
 
 
 def sync_activities(count: int = 100) -> dict:
     """
-    Pobierz ostatnie aktywności biegowe z Garmin Connect.
-    Oblicz VDOT dla każdej, zapisz do bazy.
+    Pobierz ostatnie aktywności z Garmin Connect.
+    Oblicz VDOT dla biegów, zapisz do bazy.
     """
     sync_id = log_sync_start()
     synced = 0
@@ -70,17 +86,17 @@ def sync_activities(count: int = 100) -> dict:
     try:
         garmin = get_garmin_client()
 
-        # Pobierz aktywności biegowe
-        activities = garmin.get_activities(0, count, activitytype="running")
-        log.info(f"Pobrano {len(activities)} aktywności biegowych z Garmin.")
+        activities = garmin.get_activities(0, count)
+        log.info(f"Pobrano {len(activities)} aktywności z Garmin.")
 
         for act in activities:
             distance_m = act.get('distance', 0) or 0
             duration_s = act.get('duration', 0) or 0
+            activity_type = act.get('activityType', {}).get('typeKey', 'unknown')
 
-            # Oblicz VDOT (tylko dla biegów ≥1km i ≥5min)
+            # Oblicz VDOT tylko dla biegów ≥1km i ≥5min
             vdot = None
-            if distance_m >= 1000 and duration_s >= 300:
+            if 'running' in activity_type and distance_m >= 1000 and duration_s >= 300:
                 vdot = calculate_vdot(distance_m, duration_s)
 
             # Oblicz tempo
@@ -92,8 +108,8 @@ def sync_activities(count: int = 100) -> dict:
                 'garmin_id': str(act.get('activityId', '')),
                 'source': 'garmin',
                 'date': (act.get('startTimeLocal', '') or '')[:10],
-                'name': act.get('activityName', 'Bieg'),
-                'activity_type': act.get('activityType', {}).get('typeKey', 'running'),
+                'name': act.get('activityName', ''),
+                'activity_type': activity_type,
                 'distance_m': distance_m,
                 'duration_s': duration_s,
                 'moving_duration_s': act.get('movingDuration', 0),
@@ -154,14 +170,3 @@ def get_garmin_vo2max() -> dict:
         }
     except Exception as e:
         return {'error': str(e)}
-
-
-def get_garmin_rhr() -> int | None:
-    """Pobierz tętno spoczynkowe z Garmin."""
-    try:
-        garmin = get_garmin_client()
-        from datetime import date
-        hr_data = garmin.get_heart_rates(date.today().isoformat())
-        return hr_data.get('restingHeartRate')
-    except Exception:
-        return None
