@@ -829,9 +829,9 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
       <h1>PRZEWODNIK<br>PO <span>BIEGANIU</span></h1>
       <p class="lead">System VDOT Jacka Danielsa, spersonalizowane strefy treningowe i plan treningowy oparty o szkołę amerykańską.</p>
     </div>
-    <div class="vdot-circle">
+    <div class="vdot-circle" style="cursor:pointer" onclick="document.getElementById('vdot-modal').style.display='flex'" title="Kliknij żeby zmienić VDOT">
       <small>VDOT</small>
-      <strong>27.9</strong>
+      <strong id="hero-vdot">--</strong>
     </div>
   </div>
 </header>
@@ -840,13 +840,13 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
 <div class="stats-bar">
   <div class="stats">
     <div class="stat">
-      <div class="label">Półmaraton</div>
-      <div class="value">2:30:03</div>
+      <div class="label">Najlepszy VDOT</div>
+      <div class="value accent" id="bar-vdot">--</div>
     </div>
     <div class="stat">
-      <div class="label">Tempo</div>
-      <div class="value accent">7:07</div>
-      <div class="unit">min/km</div>
+      <div class="label">Śr. tętno</div>
+      <div class="value" id="bar-hr">--</div>
+      <div class="unit">bpm</div>
     </div>
     <div class="stat">
       <div class="label">HR max</div>
@@ -855,17 +855,17 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
     </div>
     <div class="stat">
       <div class="label">Easy</div>
-      <div class="value green">7:20–8:02</div>
+      <div class="value green" id="bar-easy">--</div>
       <div class="unit">min/km</div>
     </div>
     <div class="stat">
       <div class="label">Threshold</div>
-      <div class="value orange">6:27</div>
+      <div class="value orange" id="bar-threshold">--</div>
       <div class="unit">min/km</div>
     </div>
     <div class="stat">
       <div class="label">Interval</div>
-      <div class="value red">5:40</div>
+      <div class="value red" id="bar-interval">--</div>
       <div class="unit">min/km</div>
     </div>
   </div>
@@ -992,7 +992,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
 
 <!-- ═══ STREFY TRENINGOWE ═══ -->
 <section id="strefy">
-  <h2>STREFY TRENINGOWE <span class="badge badge-green">VDOT 27.9</span></h2>
+  <h2>STREFY TRENINGOWE <span class="badge badge-green" id="strefy-badge">VDOT --</span></h2>
   <p class="section-lead">Każda strefa ma jeden cel fizjologiczny. 80% treningu to Easy — reszta to jakość.</p>
 
   <div class="zone-bar">
@@ -1011,35 +1011,35 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
       <tbody>
         <tr>
           <td><span class="tag tag-green">Easy (E)</span></td>
-          <td><strong>7:20 – 8:02</strong> /km</td>
+          <td><strong id="zt-easy">--</strong> /km</td>
           <td>59–74%</td>
           <td>Konwersacyjne — swobodna rozmowa</td>
           <td>Baza tlenowa, serce</td>
         </tr>
         <tr>
           <td><span class="tag tag-blue">Marathon (M)</span></td>
-          <td><strong>7:15</strong> /km</td>
+          <td><strong id="zt-marathon">--</strong> /km</td>
           <td>75–84%</td>
           <td>Umiarkowane, stabilne</td>
           <td>Tempo maratońskie</td>
         </tr>
         <tr>
           <td><span class="tag tag-yellow">Threshold (T)</span></td>
-          <td><strong>6:27</strong> /km</td>
+          <td><strong id="zt-threshold">--</strong> /km</td>
           <td>83–88%</td>
           <td>Komfortowo trudne — max 2–3 słowa</td>
           <td>Próg mleczanowy</td>
         </tr>
         <tr>
           <td><span class="tag tag-orange">Interval (I)</span></td>
-          <td><strong>5:40</strong> /km</td>
+          <td><strong id="zt-interval">--</strong> /km</td>
           <td>95–100%</td>
           <td>Bardzo ciężkie</td>
           <td>VO2max</td>
         </tr>
         <tr>
           <td><span class="tag tag-red">Repetition (R)</span></td>
-          <td><strong>5:25</strong> /km</td>
+          <td><strong id="zt-rep">--</strong> /km</td>
           <td>&gt;100%</td>
           <td>Maksymalne — pełna szybkość</td>
           <td>Szybkość, ekonomia</td>
@@ -1462,6 +1462,25 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
   <p>System VDOT Jacka Danielsa &bull; Źródła: Daniels' Running Formula (4th ed.), vdoto2.com, trenujbieg.pl</p>
 </footer>
 
+<!-- ═══ VDOT MODAL ═══ -->
+<div id="vdot-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,22,40,.85);align-items:center;justify-content:center;backdrop-filter:blur(4px)" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#fff;border-radius:12px;padding:32px;max-width:400px;width:90%;box-shadow:var(--shadow-lg)">
+    <h3 style="margin:0 0 8px;color:var(--text)">Zmień VDOT</h3>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px">Wpisz ręcznie lub zostaw puste — użyje najlepszego z Garmina.</p>
+    <div style="display:flex;gap:12px;align-items:flex-end">
+      <div style="flex:1">
+        <label style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">VDOT</label>
+        <input type="number" id="vdot-input" step="0.1" min="15" max="85" placeholder="np. 27.9" style="width:100%;padding:12px 16px;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);font-size:20px;font-family:inherit;color:var(--text);font-weight:700">
+      </div>
+      <button class="btn" onclick="applyVdot()" style="height:48px">ZASTOSUJ</button>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn" style="background:var(--bg-alt);color:var(--text);font-size:12px;padding:8px 16px" onclick="resetVdot()">RESET (Z GARMINA)</button>
+      <button class="btn" style="background:var(--bg-alt);color:var(--text);font-size:12px;padding:8px 16px" onclick="document.getElementById('vdot-modal').style.display='none'">ANULUJ</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ LIGHTBOX ═══ -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
   <img id="lightbox-img" src="" alt="">
@@ -1516,6 +1535,65 @@ function calcHR() {
     'HRmax: ' + hrmax + ' bpm (' + (hrmaxInput ? 'podane' : 'wzór Tanaki') + ') | RHR: ' + rhr + ' bpm | Rezerwa tętna: ' + hrr + ' bpm';
   document.getElementById('calc-result').style.display = 'block';
 }
+
+/* ═══ VDOT DYNAMIC ═══ */
+var currentVdot = null;
+var garminVdot = null;
+
+function updateAllPaces(vdot) {
+  if (!vdot) return;
+  currentVdot = vdot;
+  // Update hero badge
+  document.getElementById('hero-vdot').textContent = vdot;
+  // Update stats bar
+  document.getElementById('bar-vdot').textContent = vdot;
+  // Update section badge
+  document.getElementById('strefy-badge').textContent = 'VDOT ' + vdot;
+  // Fetch computed paces from API
+  fetch('/api/analytics/training-paces?vdot=' + vdot)
+    .then(function(r){return r.json()})
+    .then(function(p) {
+      // Stats bar
+      if (p.easy) document.getElementById('bar-easy').textContent = p.easy;
+      if (p.threshold) document.getElementById('bar-threshold').textContent = p.threshold;
+      if (p.interval) document.getElementById('bar-interval').textContent = p.interval;
+      // Zones table
+      if (p.easy) document.getElementById('zt-easy').textContent = p.easy;
+      if (p.marathon) document.getElementById('zt-marathon').textContent = p.marathon;
+      if (p.threshold) document.getElementById('zt-threshold').textContent = p.threshold;
+      if (p.interval) document.getElementById('zt-interval').textContent = p.interval;
+      if (p.repetition) document.getElementById('zt-rep').textContent = p.repetition;
+    });
+}
+
+function loadVdotFromGarmin() {
+  fetch('/api/analytics/training-paces').then(function(r){return r.json()}).then(function(p) {
+    garminVdot = p.vdot;
+    var saved = localStorage.getItem('manual_vdot');
+    updateAllPaces(saved ? parseFloat(saved) : p.vdot);
+    // Also update avg HR
+    fetch('/api/analytics/summary').then(function(r){return r.json()}).then(function(s) {
+      if (s.avg_hr) document.getElementById('bar-hr').textContent = Math.round(s.avg_hr);
+    });
+  });
+}
+
+function applyVdot() {
+  var val = document.getElementById('vdot-input').value;
+  if (val && parseFloat(val) >= 15 && parseFloat(val) <= 85) {
+    localStorage.setItem('manual_vdot', val);
+    updateAllPaces(parseFloat(val));
+    document.getElementById('vdot-modal').style.display = 'none';
+  }
+}
+
+function resetVdot() {
+  localStorage.removeItem('manual_vdot');
+  if (garminVdot) updateAllPaces(garminVdot);
+  document.getElementById('vdot-modal').style.display = 'none';
+}
+
+loadVdotFromGarmin();
 
 /* ═══ GARMIN DASHBOARD ═══ */
 
