@@ -1389,116 +1389,69 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
   </div>
 </section>
 
-<!-- ═══ DZIENNIK TRENINGOWY ═══ -->
+<!-- ═══ GARMIN DASHBOARD ═══ -->
 <section id="garmin">
-  <h2>DZIENNIK TRENINGOWY <span class="badge badge-purple">Garmin</span></h2>
-  <p class="section-lead">Dodawaj treningi — dane zapisują się na serwerze. Wrzucaj screenshoty z Garmina.</p>
+  <h2>GARMIN CONNECT <span class="badge badge-purple">Auto-sync</span></h2>
+  <p class="section-lead">Dane synchronizowane automatycznie z Garmin Connect co 6 godzin.</p>
 
-  <!-- FORMULARZ -->
-  <div class="card" style="border-top: 4px solid var(--purple); margin-bottom: 28px;">
-    <div class="card-body">
-      <h4 style="margin-top:0;font-family:'Barlow Condensed';text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Dodaj trening</h4>
-      <form id="entry-form" onsubmit="return submitEntry(event)">
-        <div class="calc-form" style="grid-template-columns:1fr 1fr 1fr">
-          <div>
-            <label for="entry-date">Data</label>
-            <input type="date" id="entry-date" required>
-          </div>
-          <div>
-            <label for="entry-distance">Dystans (km)</label>
-            <input type="number" id="entry-distance" step="0.01" min="0" placeholder="np. 5.2" required>
-          </div>
-          <div>
-            <label for="entry-time">Czas (hh:mm:ss)</label>
-            <input type="text" id="entry-time" placeholder="np. 38:12 lub 1:02:30" required>
-          </div>
-        </div>
-        <div class="calc-form" style="grid-template-columns:1fr 1fr;margin-top:0">
-          <div>
-            <label for="entry-type">Typ treningu</label>
-            <select id="entry-type">
-              <option value="">— wybierz —</option>
-              <option value="easy">Easy (Baza)</option>
-              <option value="easy+strides">Easy + Rytmy</option>
-              <option value="interval">Interval (Kilometrówki)</option>
-              <option value="threshold">Threshold (Próg)</option>
-              <option value="marathon">Marathon (Tempo)</option>
-              <option value="long">Bieg długi</option>
-              <option value="race">Zawody</option>
-              <option value="other">Inny</option>
-            </select>
-          </div>
-          <div>
-            <label for="entry-screenshot">Screenshot z Garmina</label>
-            <input type="file" id="entry-screenshot" accept="image/*" style="padding:9px 16px">
-          </div>
-        </div>
-        <div style="margin-top:12px">
-          <label for="entry-notes">Notatki (opcjonalnie)</label>
-          <input type="text" id="entry-notes" placeholder="np. Czułam się świetnie, pogoda 15°C" style="width:100%;padding:12px 16px;background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);font-size:16px;font-family:inherit;color:var(--text)">
-        </div>
-        <div style="margin-top:16px;display:flex;align-items:center;gap:12px">
-          <button type="submit" class="btn" id="submit-btn">DODAJ TRENING</button>
-          <span id="submit-status" style="font-size:14px;color:var(--green);display:none">Dodano!</span>
-        </div>
-      </form>
+  <!-- SYNC CONTROLS -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+    <button class="btn" onclick="garminSync()" id="sync-btn">SYNCHRONIZUJ TERAZ</button>
+    <span id="sync-status" style="font-size:13px;color:var(--text-dim)"></span>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div id="garmin-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px">
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Treningi</div><div class="value accent" id="gs-count">-</div>
+    </div>
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Łącznie km</div><div class="value green" id="gs-km">-</div>
+    </div>
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Łączny czas</div><div class="value" id="gs-hours">-</div>
+    </div>
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Śr. tempo</div><div class="value orange" id="gs-pace">-</div><div class="unit">min/km</div>
+    </div>
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Najlepszy VDOT</div><div class="value accent" id="gs-vdot">-</div>
+    </div>
+    <div class="stat" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+      <div class="label">Śr. tętno</div><div class="value red" id="gs-hr">-</div><div class="unit">bpm</div>
     </div>
   </div>
 
-  <!-- TABELA TRENINGÓW -->
-  <h3>Historia treningów</h3>
-  <div id="entries-empty" style="text-align:center;padding:40px 20px;color:var(--text-light);display:none">
-    Brak treningów. Dodaj pierwszy trening powyżej!
-  </div>
-  <div class="table-wrap" id="entries-table-wrap" style="display:none">
-    <table id="entries-table">
+  <!-- VDOT CHART -->
+  <h3>Progresja VDOT</h3>
+  <div id="vdot-chart" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:32px;min-height:300px"></div>
+
+  <!-- WEEKLY VOLUME CHART -->
+  <h3>Objętość tygodniowa</h3>
+  <div id="weekly-chart" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:32px;min-height:280px"></div>
+
+  <!-- ACTIVITIES TABLE -->
+  <h3>Ostatnie aktywności</h3>
+  <div class="table-wrap" id="activities-table-wrap">
+    <table id="activities-table">
       <thead>
         <tr>
           <th>Data</th>
-          <th>Typ</th>
+          <th>Aktywność</th>
           <th>Dystans</th>
           <th>Czas</th>
           <th>Tempo</th>
-          <th>Notatki</th>
-          <th>Screen</th>
-          <th></th>
+          <th>HR śr.</th>
+          <th>HR max</th>
+          <th>VDOT</th>
         </tr>
       </thead>
-      <tbody id="entries-tbody"></tbody>
+      <tbody id="activities-tbody">
+        <tr><td colspan="8" style="text-align:center;color:var(--text-light);padding:32px">Ładowanie...</td></tr>
+      </tbody>
     </table>
   </div>
 
-  <!-- STATYSTYKI -->
-  <div id="entries-stats" style="display:none;margin-top:24px">
-    <div class="stats" style="max-width:100%;padding:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
-      <div class="stat" id="stat-total" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Treningi</div>
-        <div class="value accent">0</div>
-      </div>
-      <div class="stat" id="stat-km" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Łącznie km</div>
-        <div class="value green">0</div>
-      </div>
-      <div class="stat" id="stat-time" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Łączny czas</div>
-        <div class="value">0h</div>
-      </div>
-      <div class="stat" id="stat-avg-pace" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Śr. tempo</div>
-        <div class="value orange">-</div>
-        <div class="unit">min/km</div>
-      </div>
-      <div class="stat" id="stat-avg-dist" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Śr. dystans</div>
-        <div class="value">-</div>
-        <div class="unit">km</div>
-      </div>
-      <div class="stat" id="stat-last" style="border-bottom:1px solid var(--border-light)">
-        <div class="label">Ostatni</div>
-        <div class="value" style="font-size:18px">-</div>
-      </div>
-    </div>
-  </div>
 </section>
 
 </div>
@@ -1514,6 +1467,7 @@ tbody tr:nth-child(even):hover { background: var(--blue-light); }
   <img id="lightbox-img" src="" alt="">
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 /* NAV */
 document.querySelectorAll('.nav-links a').forEach(a => {
@@ -1563,167 +1517,147 @@ function calcHR() {
   document.getElementById('calc-result').style.display = 'block';
 }
 
-/* TRAINING LOG — API */
-var TYPE_LABELS = {
-  'easy': 'Easy', 'easy+strides': 'Easy + Rytmy', 'interval': 'Interval',
-  'threshold': 'Threshold', 'marathon': 'Marathon', 'long': 'Bieg długi',
-  'race': 'Zawody', 'other': 'Inny', '': '—'
-};
-var TYPE_COLORS = {
-  'easy': 'tag-green', 'easy+strides': 'tag-green', 'interval': 'tag-orange',
-  'threshold': 'tag-red', 'marathon': 'tag-blue', 'long': 'tag-blue',
-  'race': 'tag-purple', 'other': 'tag-yellow', '': ''
+/* ═══ GARMIN DASHBOARD ═══ */
+
+var TYPE_TAGS = {
+  'running': ['Bieganie','tag-green'], 'walking': ['Chodzenie','tag-blue'],
+  'strength_training': ['Siłownia','tag-purple'], 'cycling': ['Rower','tag-yellow'],
+  'treadmill_running': ['Bieżnia','tag-green'], 'trail_running': ['Trail','tag-orange']
 };
 
-/* Set default date to today */
-document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
-
-function calcPace(distKm, timeStr) {
-  if (!distKm || !timeStr || distKm <= 0) return '';
-  var parts = timeStr.split(':').map(Number);
-  var totalSec = 0;
-  if (parts.length === 3) totalSec = parts[0]*3600 + parts[1]*60 + parts[2];
-  else if (parts.length === 2) totalSec = parts[0]*60 + parts[1];
-  else return '';
-  var paceSecPerKm = totalSec / distKm;
-  var m = Math.floor(paceSecPerKm / 60);
-  var s = Math.round(paceSecPerKm % 60);
-  return m + ':' + (s < 10 ? '0' : '') + s;
+function fmtDate(d) {
+  if (!d) return '-';
+  return new Date(d+'T00:00:00').toLocaleDateString('pl-PL',{day:'numeric',month:'short'});
 }
 
-function formatDate(dateStr) {
-  var d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
+function fmtPace(s) {
+  if (!s || s <= 0) return '-';
+  var m = Math.floor(s/60), sec = Math.round(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
 }
 
-function timeToMinutes(timeStr) {
-  if (!timeStr) return 0;
-  var parts = timeStr.split(':').map(Number);
-  if (parts.length === 3) return parts[0]*60 + parts[1] + parts[2]/60;
-  if (parts.length === 2) return parts[0] + parts[1]/60;
-  return 0;
-}
-
-function renderEntries(entries) {
-  var tbody = document.getElementById('entries-tbody');
-  var tableWrap = document.getElementById('entries-table-wrap');
-  var emptyEl = document.getElementById('entries-empty');
-  var statsEl = document.getElementById('entries-stats');
-
-  if (!entries.length) {
-    tableWrap.style.display = 'none';
-    emptyEl.style.display = 'block';
-    statsEl.style.display = 'none';
-    return;
-  }
-
-  tableWrap.style.display = 'block';
-  emptyEl.style.display = 'none';
-  statsEl.style.display = 'block';
-  tbody.innerHTML = '';
-
-  var totalKm = 0, totalMin = 0;
-
-  entries.forEach(function(e) {
-    var pace = e.pace || calcPace(parseFloat(e.distance), e.time);
-    var dist = parseFloat(e.distance) || 0;
-    totalKm += dist;
-    totalMin += timeToMinutes(e.time);
-
-    var screencol = '';
-    if (e.screenshot) {
-      screencol = '<img src="/uploads/' + e.screenshot + '" alt="screen" ' +
-        'style="width:48px;height:48px;object-fit:cover;border-radius:4px;cursor:pointer;border:1px solid var(--border)" ' +
-        'onclick="document.getElementById(\'lightbox-img\').src=\'/uploads/' + e.screenshot + '\';document.getElementById(\'lightbox\').classList.add(\'open\')">';
-    }
-
-    var typeTag = e.type ? '<span class="tag ' + (TYPE_COLORS[e.type]||'') + '">' + (TYPE_LABELS[e.type]||e.type) + '</span>' : '—';
-
-    tbody.innerHTML += '<tr>' +
-      '<td style="white-space:nowrap;font-weight:600">' + formatDate(e.date) + '</td>' +
-      '<td>' + typeTag + '</td>' +
-      '<td><strong>' + (e.distance || '—') + '</strong> km</td>' +
-      '<td>' + (e.time || '—') + '</td>' +
-      '<td style="color:var(--orange);font-weight:600">' + (pace || '—') + '</td>' +
-      '<td style="max-width:180px;font-size:13px;color:var(--text-dim)">' + (e.notes || '') + '</td>' +
-      '<td>' + screencol + '</td>' +
-      '<td><button onclick="deleteEntry(\'' + e.id + '\')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:4px" title="Usuń">&times;</button></td>' +
-      '</tr>';
+/* Load summary stats */
+function loadStats() {
+  fetch('/api/analytics/summary').then(function(r){return r.json()}).then(function(s) {
+    document.getElementById('gs-count').textContent = s.total_runs || 0;
+    document.getElementById('gs-km').textContent = (s.total_km || 0).toFixed(0);
+    document.getElementById('gs-hours').textContent = (s.total_hours || 0).toFixed(0)+'h';
+    document.getElementById('gs-pace').textContent = s.avg_pace_fmt || '-';
+    document.getElementById('gs-vdot').textContent = s.best_vdot || '-';
+    document.getElementById('gs-hr').textContent = s.avg_hr || '-';
   });
-
-  /* Stats */
-  document.querySelector('#stat-total .value').textContent = entries.length;
-  document.querySelector('#stat-km .value').textContent = totalKm.toFixed(1);
-  var hours = Math.floor(totalMin / 60);
-  var mins = Math.round(totalMin % 60);
-  document.querySelector('#stat-time .value').textContent = hours + 'h ' + mins + 'm';
-  if (totalKm > 0) {
-    var avgPaceSec = (totalMin * 60) / totalKm;
-    var pm = Math.floor(avgPaceSec / 60);
-    var ps = Math.round(avgPaceSec % 60);
-    document.querySelector('#stat-avg-pace .value').textContent = pm + ':' + (ps < 10 ? '0' : '') + ps;
-    document.querySelector('#stat-avg-dist .value').textContent = (totalKm / entries.length).toFixed(1);
-  }
-  document.querySelector('#stat-last .value').textContent = formatDate(entries[0].date);
 }
 
-function loadEntries() {
-  fetch('/api/entries')
-    .then(function(r) { return r.json(); })
-    .then(renderEntries)
-    .catch(function(err) { console.error('Błąd ładowania:', err); });
-}
-
-function submitEntry(e) {
-  e.preventDefault();
-  var btn = document.getElementById('submit-btn');
-  var status = document.getElementById('submit-status');
-  btn.disabled = true;
-  btn.textContent = 'ZAPISUJĘ...';
-
-  var dist = document.getElementById('entry-distance').value;
-  var time = document.getElementById('entry-time').value;
-  var pace = calcPace(parseFloat(dist), time);
-
-  var fd = new FormData();
-  fd.append('date', document.getElementById('entry-date').value);
-  fd.append('distance', dist);
-  fd.append('time', time);
-  fd.append('pace', pace);
-  fd.append('type', document.getElementById('entry-type').value);
-  fd.append('notes', document.getElementById('entry-notes').value);
-
-  var fileInput = document.getElementById('entry-screenshot');
-  if (fileInput.files[0]) fd.append('screenshot', fileInput.files[0]);
-
-  fetch('/api/entries', { method: 'POST', body: fd })
-    .then(function(r) { return r.json(); })
-    .then(function() {
-      btn.disabled = false;
-      btn.textContent = 'DODAJ TRENING';
-      status.style.display = 'inline';
-      setTimeout(function() { status.style.display = 'none'; }, 2000);
-      document.getElementById('entry-form').reset();
-      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
-      loadEntries();
-    })
-    .catch(function(err) {
-      btn.disabled = false;
-      btn.textContent = 'DODAJ TRENING';
-      alert('Błąd zapisu: ' + err.message);
+/* Load activities table */
+function loadActivities() {
+  fetch('/api/activities?limit=50').then(function(r){return r.json()}).then(function(acts) {
+    var tbody = document.getElementById('activities-tbody');
+    if (!acts.length) { tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text-light)">Brak aktywności</td></tr>'; return; }
+    tbody.innerHTML = '';
+    acts.forEach(function(a) {
+      var t = TYPE_TAGS[a.activity_type] || [a.activity_type||'?',''];
+      var vdotCell = a.vdot ? '<strong style="color:var(--blue)">'+a.vdot+'</strong>' : '-';
+      tbody.innerHTML += '<tr>'+
+        '<td style="white-space:nowrap;font-weight:600">'+fmtDate(a.date)+'</td>'+
+        '<td><span class="tag '+t[1]+'">'+t[0]+'</span></td>'+
+        '<td><strong>'+a.distance_km+'</strong> km</td>'+
+        '<td>'+a.duration_fmt+'</td>'+
+        '<td style="color:var(--orange);font-weight:600">'+a.pace_fmt+'</td>'+
+        '<td>'+(a.avg_hr||'-')+'</td>'+
+        '<td>'+(a.max_hr||'-')+'</td>'+
+        '<td>'+vdotCell+'</td>'+
+        '</tr>';
     });
-
-  return false;
+  });
 }
 
-function deleteEntry(id) {
-  if (!confirm('Usunąć ten trening?')) return;
-  fetch('/api/entries/' + id, { method: 'DELETE' })
-    .then(function() { loadEntries(); })
-    .catch(function(err) { alert('Błąd: ' + err.message); });
+/* VDOT chart */
+function loadVdotChart() {
+  fetch('/api/analytics/vdot-history').then(function(r){return r.json()}).then(function(data) {
+    if (!data.length) { document.getElementById('vdot-chart').innerHTML='<p style="text-align:center;color:var(--text-light);padding:40px">Brak danych VDOT (potrzebne biegi ≥2km)</p>'; return; }
+    var points = data.map(function(d){return{x:new Date(d.date).getTime(),y:d.vdot}});
+    new ApexCharts(document.getElementById('vdot-chart'), {
+      chart:{type:'line',height:280,background:'transparent',toolbar:{show:true},zoom:{enabled:true},fontFamily:'Barlow,sans-serif'},
+      series:[{name:'VDOT',data:points}],
+      xaxis:{type:'datetime',labels:{style:{colors:'#5c6478'}}},
+      yaxis:{title:{text:'VDOT',style:{color:'#5c6478'}},labels:{style:{colors:'#5c6478'}},min:function(m){return Math.floor(m-2)},max:function(m){return Math.ceil(m+2)}},
+      stroke:{curve:'smooth',width:3},
+      colors:['#005BD9'],
+      markers:{size:5,strokeWidth:0},
+      tooltip:{x:{format:'dd MMM yyyy'},theme:'light'},
+      grid:{borderColor:'#e2e5ec'},
+      annotations:{yaxis:[{y:27.9,borderColor:'#16a34a',strokeDashArray:4,label:{text:'Cel: 27.9',style:{color:'#16a34a',background:'#ecfdf5'}}}]}
+    }).render();
+  });
 }
 
-loadEntries();
+/* Weekly volume chart */
+function loadWeeklyChart() {
+  fetch('/api/analytics/weekly?weeks=12').then(function(r){return r.json()}).then(function(data) {
+    if (!data.length) return;
+    data.reverse();
+    new ApexCharts(document.getElementById('weekly-chart'), {
+      chart:{type:'bar',height:260,background:'transparent',toolbar:{show:false},fontFamily:'Barlow,sans-serif'},
+      series:[
+        {name:'Dystans (km)',data:data.map(function(d){return d.total_km||0})},
+        {name:'Treningi',data:data.map(function(d){return d.runs||0})}
+      ],
+      xaxis:{categories:data.map(function(d){return d.week}),labels:{style:{colors:'#5c6478',fontSize:'11px'},rotate:-45}},
+      yaxis:[
+        {title:{text:'km',style:{color:'#5c6478'}},labels:{style:{colors:'#5c6478'}}},
+        {opposite:true,title:{text:'treningi',style:{color:'#5c6478'}},labels:{style:{colors:'#5c6478'}}}
+      ],
+      colors:['#005BD9','#16a34a'],
+      plotOptions:{bar:{borderRadius:4,columnWidth:'60%'}},
+      grid:{borderColor:'#e2e5ec'},
+      tooltip:{theme:'light'},
+      legend:{position:'top',horizontalAlign:'right'}
+    }).render();
+  });
+}
+
+/* Sync button */
+function garminSync() {
+  var btn = document.getElementById('sync-btn');
+  var status = document.getElementById('sync-status');
+  btn.disabled = true; btn.textContent = 'SYNCHRONIZUJĘ...';
+  status.textContent = '';
+  fetch('/api/garmin/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){return r.json()})
+    .then(function(d) {
+      btn.disabled = false; btn.textContent = 'SYNCHRONIZUJ TERAZ';
+      if (d.status === 'ok') {
+        status.textContent = 'Zsynchronizowano! '+d.total_fetched+' aktywności, '+d.new_synced+' nowych.';
+        status.style.color = 'var(--green)';
+        loadStats(); loadActivities(); loadVdotChart(); loadWeeklyChart();
+      } else {
+        status.textContent = 'Błąd: '+(d.error||'nieznany');
+        status.style.color = 'var(--red)';
+      }
+    })
+    .catch(function(e) {
+      btn.disabled = false; btn.textContent = 'SYNCHRONIZUJ TERAZ';
+      status.textContent = 'Błąd połączenia';
+      status.style.color = 'var(--red)';
+    });
+}
+
+/* Load sync status */
+fetch('/api/garmin/status').then(function(r){return r.json()}).then(function(s) {
+  var st = document.getElementById('sync-status');
+  if (s.connected && s.last_sync && s.last_sync.status === 'done') {
+    st.textContent = 'Ostatni sync: '+new Date(s.last_sync.finished_at).toLocaleString('pl-PL')+' | '+s.activity_count+' aktywności';
+  } else if (s.last_sync && s.last_sync.error) {
+    st.textContent = 'Ostatni sync: błąd';
+    st.style.color = 'var(--red)';
+  }
+});
+
+/* Init */
+loadStats();
+loadActivities();
+loadVdotChart();
+loadWeeklyChart();
 </script>
 </body>
 </html>
