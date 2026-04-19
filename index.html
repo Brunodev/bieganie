@@ -1608,8 +1608,8 @@ function updateAllPaces(vdot) {
           var vo2 = -4.60 + 0.182258 * v + 0.000104 * v * v;
           var pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t);
           calcVdot = vo2 / pct;
-          if (calcVdot > vdot) hi = mid;
-          else lo = mid;
+          if (calcVdot > vdot) lo = mid;
+          else hi = mid;
         }
         var secs = Math.round(mid);
         var h = Math.floor(secs / 3600);
